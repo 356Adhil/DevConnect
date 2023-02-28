@@ -32,21 +32,18 @@ function Navbar() {
 
   return (
     <div>
-        
       <nav
-      
         className={`bg-primary font-bold text-sm text-white ${
           scroll ? "navbar-scroll" : ""
         }`}
       >
-      
         <div className="flex justify-between md:items-center p-5">
           <div>
             <img src={scroll ? Logo : LogoN} alt="" />
           </div>
-        
+
           <div className={`${hamburg ? "hidden md:block" : "block"}`}>
-            <ul className="md:flex gap-6 xl:gap-11">
+            <ul className="md:flex gap-6 xl:gap-11 text-xs md:text-sm">
               <li className="md:hover:text-secondary-200 py-2 cursor-pointer">
                 <span>Home</span>
               </li>
@@ -65,10 +62,12 @@ function Navbar() {
             </ul>
           </div>
 
-          <div className={`${hamburg ? "hidden md:block" : " flex items-center"}`}>
+          <div
+            className={`${hamburg ? "hidden md:block" : " flex items-center"}`}
+          >
             <ul className="flex gap-3 items-center">
               <li>
-                <button className="border-transparent items-center border-2 bg-secondary hover:bg-primary text-primary hover:border-white hover:text-white p-2 pr-5 pl-5 rounded-full">
+                <button className="border-transparent items-center border-2 bg-secondary hover:bg-primary text-primary hover:border-white hover:text-white md:py-2 md:pr-5 md:pl-5 py-1 pr-4 pl-4 rounded-full">
                   Login
                 </button>
               </li>
@@ -77,7 +76,7 @@ function Navbar() {
               </li>
             </ul>
           </div>
-  
+
           {hamburg && (
             <div className="md:hidden cursor-pointer" onClick={handleHamburg}>
               <svg
