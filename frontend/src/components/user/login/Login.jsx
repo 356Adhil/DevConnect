@@ -31,7 +31,7 @@ function Login() {
   });
 
   return (
-    <div className="flex justify-center mx-96 my-10 rounded-lg py-6 text-sm">
+    <div className="flex justify-center xl:mx-96 xl:my-10 xl:rounded-xl xl:py-6 text-sm">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm shadow-xl px-4 py-5 rounded-lg border"

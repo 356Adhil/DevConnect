@@ -22,7 +22,7 @@ function Cover() {
     };
   
     return (
-        <div className='hidden md:block'>
+        <div className=''>
             <Slider {...settings}>
                 <div >
                     <img src={cover1} alt=''/>
