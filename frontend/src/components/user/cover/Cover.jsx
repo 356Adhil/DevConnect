@@ -6,7 +6,6 @@ import './Cover.css';
 import cover1 from '../../../assets/cover.jpg'
 import cover2 from '../../../assets/cover2.jpg'
 
-
 function Cover() {
     const settings = {
         dots: false,

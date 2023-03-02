@@ -2,15 +2,43 @@ import React, { useState, useEffect } from "react";
 import Logo from "../../../assets/NDevConnect.svg";
 import LogoN from "../../../assets/devconnect.svg";
 import "./Navbar.css";
+import Signup from "../signup/Signup";
+import Login from "../login/Login";
 
 function Navbar() {
   const [scroll, setScroll] = useState(false);
   const [hamburg, setHamburg] = useState(true);
+  const [showSignup, setShowSignup] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   function handleHamburg() {
     if (hamburg) {
       setHamburg(false);
     } else {
+      setHamburg(true);
+    }
+  }
+
+  function handleSignup() {
+    if (showSignup) {
+      setShowSignup(false);
+      setHamburg(true);
+      setShowLogin(false);
+    } else {
+      setShowLogin(false);
+      setShowSignup(true);
+      setHamburg(true);
+    }
+  }
+
+  function handleLogin() {
+    if (showLogin) {
+      setShowLogin(false);
+      setHamburg(true);
+      setShowSignup(false);
+    } else {
+      setShowSignup(false);
+      setShowLogin(true);
       setHamburg(true);
     }
   }
@@ -31,7 +59,7 @@ function Navbar() {
   }, []);
 
   return (
-    <div>
+    <div >
       <nav
         className={`bg-primary font-bold text-sm text-white ${
           scroll ? "navbar-scroll" : ""
@@ -66,12 +94,12 @@ function Navbar() {
             className={`${hamburg ? "hidden md:block" : " flex items-center"}`}
           >
             <ul className="flex gap-3 items-center">
-              <li>
+              <li onClick={handleLogin}>
                 <button className="border-transparent items-center border-2 bg-secondary hover:bg-primary text-primary hover:border-white hover:text-white md:py-2 md:pr-5 md:pl-5 py-1 pr-4 pl-4 rounded-full">
                   Login
                 </button>
               </li>
-              <li>
+              <li onClick={handleSignup}>
                 <button>Sign Up</button>
               </li>
             </ul>
@@ -115,6 +143,13 @@ function Navbar() {
           )}
         </div>
       </nav>
+      <div className="absolute inset-y-0 md:mx-80 md:my-28 flex my-28 ml-1">
+        {showSignup ? <Signup /> : ""}
+      </div>
+
+      <div className="absolute inset-y-0 md:mx-80 md:my-28 flex my-28 ml-1">
+        {showLogin ? <Login /> : ""}
+      </div>
     </div>
   );
 }

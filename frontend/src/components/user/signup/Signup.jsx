@@ -9,7 +9,7 @@ const onSubmit = async (values, actions) => {
   actions.resetForm();
 };
 
-function Login() {
+function Signup() {
   const [showModal, setShowModal] = useState(true);
 
   const {
@@ -22,6 +22,8 @@ function Login() {
     handleSubmit,
   } = useFormik({
     initialValues: {
+      fullName: "",
+      phone: "",
       email: "",
       password: "",
     },
@@ -45,7 +47,72 @@ function Login() {
           </button>
           
           <div className="text-gray-500 font-bold flex justify-center pb-14 pt-3 text-2xl">
-            <h1>Login</h1>
+            <h1><u>Sign Up</u></h1>
+            
+          </div>
+
+          {/* Full Name */}
+
+          <div className="md:flex md:items-center mb-6">
+            <div className="md:w-1/3">
+              <label
+                className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                htmlFor="inline-full-name"
+              >
+                Full Name
+              </label>
+            </div>
+            <div className="md:w-2/3">
+              <input
+                placeholder="Enter Your Name"
+                className={`bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 ${
+                  touched.fullName && errors.fullName
+                    ? "border-red-500"
+                    : "focus:border-purple-500"
+                }`}
+                id="fullName"
+                type="text"
+                name="fullName"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.fullName}
+              />
+              {touched.fullName && errors.fullName && (
+                <p className="text-red-500 text-xs italic">{errors.fullName}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Phone Number */}
+
+          <div className="md:flex md:items-center mb-6">
+            <div className="md:w-1/3">
+              <label
+                className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                htmlFor="inline-full-name"
+              >
+                Phone
+              </label>
+            </div>
+            <div className="md:w-2/3">
+              <input
+                name="phone"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.phone}
+                placeholder="Enter Your Phone Number"
+                className={`bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 ${
+                  touched.phone && errors.phone
+                    ? "border-red-500"
+                    : "focus:border-purple-500"
+                }`}
+                id="phone"
+                type="tel"
+              />
+              {touched.phone && errors.phone && (
+                <p className="text-red-500 text-xs italic">{errors.phone}</p>
+              )}
+            </div>
           </div>
 
           {/* Email */}
@@ -119,7 +186,7 @@ function Login() {
                 type="submit"
                 disabled={isSubmitting}
               >
-                Login
+                Sign Up
               </button>
             </div>
           </div>
@@ -129,4 +196,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
