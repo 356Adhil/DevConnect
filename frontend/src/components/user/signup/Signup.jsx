@@ -1,17 +1,27 @@
 import React, { useState } from "react";
-import { useFormik } from "formik";
+import swal from 'sweetalert';
+import { Formik, useFormik } from "formik";
 import { basicSchema } from "../../../schemas";
+import axios from "axios";
 
-const onSubmit = async (values, actions) => {
-  console.log(values);
-  console.log(actions);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  actions.resetForm();
+
+const onSubmit = async (values,actions) => {
+  try {
+    const response = await axios.post('http://localhost:4000/signup', values);
+    console.log(response.data.message)
+    const success = response.data.message; // handle success response from API
+    swal("Yaay!", success, "success");
+    actions.resetForm();
+  } catch (error) {
+    console.log(error.response.data.message)
+    const already =  error.response.data.message; // handle error response from API
+    swal("Oops!", already, "error");
+    actions.resetForm()
+  }
 };
 
 function Signup() {
   const [showModal, setShowModal] = useState(true);
-
   const {
     values,
     errors,
@@ -34,6 +44,8 @@ function Signup() {
   return (
     <div className="px-8 md:flex md:justify-center lg:mx-96 md:mx-20 md:my-20 xl:my-10 xl:rounded-xl xl:py-6 text-sm">
       {showModal ? (
+    <Formik>
+      
         <form
           onSubmit={handleSubmit}
           className="w-80 md:w-full md:max-w-sm shadow-xl px-4 py-5 rounded-lg border bg-white fixed "
@@ -191,9 +203,11 @@ function Signup() {
             </div>
           </div>
         </form>
+    </Formik>
       ) : null}
     </div>
   );
 }
 
 export default Signup;
+
