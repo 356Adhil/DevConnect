@@ -33,5 +33,31 @@ module.exports = {
       return res.status(500).json({ message: "Internal server error" });
     }
   },
+
+  postLogin: async (req,res) => {
+    password = req.body.password;
+    email = req.body.email;
+    try {
+      const { email, password } = req.body;
+      User.findOne({ email, password }).then((doc) => {
+          if (doc) {
+              const reps = {
+                  id: doc._id,
+                  email: doc.email,
+                  name: doc.name,
+              }
+              const token = jwt.sign(reps, "mykeysecret", { expiresIn: '7d' });
+              res.send({ auth: true, token: token, id: reps.id});
+          } else {
+              res.send({ auth: false });
+          }
+      }).catch((e) => {
+          // console.log(e);
+          res.status(505).send(e);
+      })  
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 

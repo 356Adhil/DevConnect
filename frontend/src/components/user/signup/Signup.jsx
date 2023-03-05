@@ -1,27 +1,33 @@
 import React, { useState } from "react";
 import swal from 'sweetalert';
+import { useNavigate } from 'react-router-dom'
 import { Formik, useFormik } from "formik";
 import { basicSchema } from "../../../schemas";
 import axios from "axios";
 
 
-const onSubmit = async (values,actions) => {
-  try {
-    const response = await axios.post('http://localhost:4000/signup', values);
-    console.log(response.data.message)
-    const success = response.data.message; // handle success response from API
-    swal("Yaay!", success, "success");
-    actions.resetForm();
-  } catch (error) {
-    console.log(error.response.data.message)
-    const already =  error.response.data.message; // handle error response from API
-    swal("Oops!", already, "error");
-    actions.resetForm()
-  }
-};
+
 
 function Signup() {
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(true);
+
+  const onSubmit = async (values,actions) => {
+    try {
+      const response = await axios.post('http://localhost:4000/signup', values);
+      console.log(response.data.message)
+      const success = response.data.message; // handle success response from API
+      swal("Yaay!", success, "success");
+      actions.resetForm();
+      navigate("/login");
+    } catch (error) {
+      console.log(error.response.data.message)
+      const already =  error.response.data.message; // handle error response from API
+      swal("Oops!", already, "error");
+      actions.resetForm()
+    }
+  };
+
   const {
     values,
     errors,

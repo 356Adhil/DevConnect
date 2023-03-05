@@ -1,8 +1,16 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { useFormik } from "formik";
 import { basicSchema } from "../../../schemas";
 
 const onSubmit = async (values, actions) => {
+  try {
+    const response = await axios.post('http://localhost:4000/login', values);
+    console.log(response.data)
+  } catch (error) {
+    console.log(error)
+  }
+
   console.log(values);
   console.log(actions);
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -45,7 +53,7 @@ function Login() {
           </button>
           
           <div className="text-gray-500 font-bold flex justify-center pb-14 pt-3 text-2xl">
-            <h1>Login</h1>
+            <h1><u>Login</u></h1>
           </div>
 
           {/* Email */}
