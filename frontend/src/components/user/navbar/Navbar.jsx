@@ -4,12 +4,15 @@ import LogoN from "../../../assets/devconnect.svg";
 import "./Navbar.css";
 import Signup from "../signup/Signup";
 import Login from "../login/Login";
+import { useSelector } from "react-redux";
 
 function Navbar() {
   const [scroll, setScroll] = useState(false);
   const [hamburg, setHamburg] = useState(true);
-  const [showSignup, setShowSignup] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
+  const [showLogin, setShowLogin] = useState(false)
+  const [showSignup, setShowSignup] = useState(false)
+  const user = useSelector((state) => state.user);
+
 
   function handleHamburg() {
     if (hamburg) {

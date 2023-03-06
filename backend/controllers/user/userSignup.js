@@ -1,6 +1,7 @@
 const { response } = require("express");
 const User = require("../../models/userSign");
 const jwt = require("jsonwebtoken");
+const { find } = require("../../models/userSign");
 const secretKey = "secret"; // set your own secret key here
 
 module.exports = {
@@ -34,9 +35,20 @@ module.exports = {
     }
   },
 
+
   postLogin: async (req,res) => {
-    password = req.body.password;
-    email = req.body.email;
+    try {
+      const { email, password } = req.body
+     const findUser =  User.findOne({ email:email , password:password})
+     if(findUser) {
+      
+     }
+    } catch (error) {
+      
+    }
+  },
+
+  postLogin: async (req,res) => {
     try {
       const { email, password } = req.body;
       User.findOne({ email, password }).then((doc) => {
@@ -48,6 +60,7 @@ module.exports = {
               }
               const token = jwt.sign(reps, "mykeysecret", { expiresIn: '7d' });
               res.send({ auth: true, token: token, id: reps.id});
+              console.log(token)
           } else {
               res.send({ auth: false });
           }

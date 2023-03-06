@@ -1,32 +1,32 @@
 import React, { useState } from "react";
 import swal from 'sweetalert';
-import { useNavigate } from 'react-router-dom'
 import { Formik, useFormik } from "formik";
 import { basicSchema } from "../../../schemas";
 import axios from "axios";
 
 
-
-
 function Signup() {
-  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(true);
+  const [showLogin, setShowLogin] = useState(false)
+  const [showSignup, setShowSignup] = useState(false)
+  
 
-  const onSubmit = async (values,actions) => {
+  const onSubmit = async (values, actions) => {
+  
     try {
       const response = await axios.post('http://localhost:4000/signup', values);
-      console.log(response.data.message)
-      const success = response.data.message; // handle success response from API
+      const success = response.data.message;
       swal("Yaay!", success, "success");
       actions.resetForm();
-      navigate("/login");
+      setShowSignup(!showSignup)
+      setShowLogin(!showLogin)
     } catch (error) {
-      console.log(error.response.data.message)
-      const already =  error.response.data.message; // handle error response from API
+      const already = error.response.data.message;
       swal("Oops!", already, "error");
-      actions.resetForm()
+      actions.resetForm();
     }
   };
+  
 
   const {
     values,

@@ -1,18 +1,37 @@
-import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import storage from 'redux-persist/lib/storage'
-import {persistReducer} from 'redux-persist'
-const persistConfig = {
-    key: 'root',
-    version: 1,
-    storage
-}
+import { legacy_createStore as createStore } from "redux";
 
-const reducer = combineReducers({
+const initialState = {
+  user: null,
+  admin: null
+};
 
-})
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "USER_LOGIN":
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case "USER_LOGOUT":
+      return {
+        ...state,
+        user: null,
+      };
+      case "ADMIN_LOGIN":
+      return {
+        ...state,
+        admin: action.payload,
+      };
+      case "ADMIN_LOGOUT":
+      return {
+        ...state,
+        admin: null,
+      };
+    default:
+      return state;
+  }
+};
 
-const persistedReducer = persistReducer(persistConfig,reducer)
+const store = createStore(reducer);
 
-export default configureStore({
-    reducer:persistedReducer
-})
+export default store;
