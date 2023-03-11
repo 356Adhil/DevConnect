@@ -4,7 +4,11 @@ import LogoN from "../../../assets/devconnect.svg";
 import "./Navbar.css";
 import Signup from "../signup/Signup";
 import Login from "../login/Login";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+// import { useSelector } from "react-redux";
+
+
 
 function Navbar() {
   const [scroll, setScroll] = useState(false);
@@ -12,14 +16,25 @@ function Navbar() {
   const [showLogin, setShowLogin] = useState(false)
   const [showSignup, setShowSignup] = useState(false)
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-
+  function HandleLogout(){
+    localStorage.removeItem("user");
+    dispatch({type:"USER_LOGOUT"});
+    navigate('/')
+  };
+  
   function handleHamburg() {
     if (hamburg) {
       setHamburg(false);
     } else {
       setHamburg(true);
     }
+  }
+
+  function handleProfile() {
+    navigate('/profile');
   }
 
   function handleSignup() {
@@ -45,6 +60,8 @@ function Navbar() {
       setHamburg(true);
     }
   }
+
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,7 +92,7 @@ function Navbar() {
 
           <div className={`${hamburg ? "hidden md:block" : "block"}`}>
             <ul className="md:flex gap-6 xl:gap-11 text-xs md:text-sm">
-              <li className="md:hover:text-secondary-200 py-2 cursor-pointer">
+              <li onClick={()=>{navigate('/')}} className="md:hover:text-secondary-200 py-2 cursor-pointer">
                 <span>Home</span>
               </li>
               <li className="hover:text-secondary-200 py-2 cursor-pointer">
@@ -97,14 +114,29 @@ function Navbar() {
             className={`${hamburg ? "hidden md:block" : " flex items-center"}`}
           >
             <ul className="flex gap-3 items-center">
+              {!user &&
               <li onClick={handleLogin}>
                 <button className="border-transparent items-center border-2 bg-secondary hover:bg-primary text-primary hover:border-white hover:text-white md:py-2 md:pr-5 md:pl-5 py-1 pr-4 pl-4 rounded-full">
                   Login
                 </button>
               </li>
+              }
+              {!user &&
               <li onClick={handleSignup}>
                 <button>Sign Up</button>
               </li>
+              }
+
+              {user &&
+              <li onClick={HandleLogout}>
+                <button>Logout</button>
+              </li>
+              }
+              {user &&
+              <li onClick={handleProfile}>
+                <button>Profile</button>
+              </li>
+              }
             </ul>
           </div>
 

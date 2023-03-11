@@ -3,18 +3,20 @@ import swal from 'sweetalert';
 import { Formik, useFormik } from "formik";
 import { basicSchema } from "../../../schemas";
 import axios from "axios";
+import Login from "../login/Login";
 
 
 function Signup() {
   const [showModal, setShowModal] = useState(true);
   const [showLogin, setShowLogin] = useState(false)
-  const [showSignup, setShowSignup] = useState(false)
+  const [showSignup, setShowSignup] = useState(true)
   
 
   const onSubmit = async (values, actions) => {
-  
+  console.log(values);
     try {
       const response = await axios.post('http://localhost:4000/signup', values);
+      console.log(response);
       const success = response.data.message;
       swal("Yaay!", success, "success");
       actions.resetForm();
@@ -48,8 +50,14 @@ function Signup() {
   });
 
   return (
+    <div className="">
+      { showLogin ? (
+      <div>
+      <Login />
+      </div>
+      ) : null }
     <div className="px-8 md:flex md:justify-center lg:mx-96 md:mx-20 md:my-20 xl:my-10 xl:rounded-xl xl:py-6 text-sm">
-      {showModal ? (
+      {showModal && showSignup ? (
     <Formik>
       
         <form
@@ -211,6 +219,7 @@ function Signup() {
         </form>
     </Formik>
       ) : null}
+    </div>
     </div>
   );
 }
