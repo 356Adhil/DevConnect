@@ -1,6 +1,6 @@
 import React from 'react'
 
-function AdminUsers() {
+function EditProfile() {
   return (
     <div>
       
@@ -8,4 +8,4 @@ function AdminUsers() {
   )
 }
 
-export default AdminUsers
+export default EditProfile

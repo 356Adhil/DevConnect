@@ -1,10 +1,29 @@
-import React, { useState } from "react";
+import axios from "../../../axios";
+import React, { useEffect, useState } from "react";
 import profile from "../../../assets/Profile.jpg";
-import ProfileEdit from "./ProfileEdit";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
 
     const user = JSON.parse(localStorage.getItem("user"))
+      const navigate = useNavigate();
+
+    const [userName,setUserName] = useState('')
+    const [about,setAbout] = useState('')
+    const [email,setEmail] = useState('')
+    useEffect(() => {
+      axios
+        .get("http://localhost:4000/getProfile", {
+          headers: {
+            Authorization: user.token,
+          },
+        })
+        .then((res) => {
+          setUserName(res.data.user.fullName)
+          setAbout(res.data.user.about)
+          setEmail(res.data.user.email)
+        }, []);
+    });
     
     const [showEditProfile,setShowEditProfile] = useState(false)
 
@@ -55,25 +74,14 @@ export default function Profile() {
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                     <div className="relative">
+                    </div>
                       <img
                         alt="..."
                         src={profile}
                         className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
                         style={{ maxWidth: "150px" }}
                       />
-                    </div>
                   </div>
-                  <ul>
-                    <li>
-                      Linkedin
-                    </li>
-                    <li>
-                      Github
-                    </li>
-                    <li>
-                      Instagram
-                    </li>
-                  </ul>
                   <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                     <div className="py-6 px-3 mt-32 sm:mt-0">
                       <button
@@ -87,7 +95,7 @@ export default function Profile() {
                     </div>
                   </div>
                   {showEditProfile &&
-                    <ProfileEdit />
+                    navigate('/editprofile')
                   }
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
                     <div className="flex justify-center py-4 lg:pt-4 pt-8">
@@ -108,34 +116,22 @@ export default function Profile() {
                 </div>
                 <div className="text-center mt-12">
                   <h3 className="text-4xl font-semibold leading-normal text-gray-800 mb-2">
-                    {user.user.fullName}
+                    {userName}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>{" "}
-                    Los Angeles, California
+                    {'user.user.place'}
                   </div>
-                  <div className="mb-2 text-gray-700 mt-10">
-                    <i className="fas fa-briefcase mr-2 text-lg text-gray-500"></i>
-                    Solution Manager - Creative Tim Officer
-                  </div>
-                  <div className="mb-2 text-gray-700">
-                    <i className="fas fa-university mr-2 text-lg text-gray-500"></i>
-                    University of Computer Science
+                  <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
+                    {email}
                   </div>
                 </div>
                 <div className="mt-10 py-10 border-t border-gray-300 text-center">
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
                       <p className="mb-4 text-lg leading-relaxed text-gray-800">
-                      {user.user.about}
+                      {about}
                       </p>
-                      <a
-                        href="#pablo"
-                        className="font-normal text-pink-500"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Show more
-                      </a>
                     </div>
                   </div>
                 </div>

@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const fileUpload = require("express-fileupload");
 const cors = require('cors');
 const userRoutes = require('./routes/user/userRoutes.js');
+const adminRoutes = require('./routes/admin/adminRoutes')
 
 app.use(express.json());
 app.use(cookieParser());
@@ -19,5 +20,7 @@ mongoose.connect("mongodb://localhost:27017/DevConnect", {
 
 // Modify this line to use a middleware function
 app.use('/', userRoutes.router);
+app.use(adminRoutes)
+
  
 app.listen(port, () => console.log(`app listening on port ${port}!`));

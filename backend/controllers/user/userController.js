@@ -68,7 +68,7 @@ module.exports = {
       const id = req.id;
 console.log(id);
       User.findOne({ _id: id }).then((user) => {
-        console.log(user);
+
         if (user) {
           res.send({ user });
         }
@@ -77,4 +77,26 @@ console.log(id);
       console.error();
     }
   },
+
+  postEditProfile: async (req,res) =>{
+    console.log('hi.....hi')
+    console.log(req.body)
+   const fullName = req.body.fullName;
+  const email = req.body.email;
+  const about = req.body.about;
+  try {
+    const id = req.id;
+    const user = await User.findOne({ _id: id });
+    if (user) {
+      await User.updateOne({ _id: id },{fullName:fullName, email:email, about:about});
+      console.log("updated....");
+      res.send({ user });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  }
+
+
 };
