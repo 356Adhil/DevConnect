@@ -1,6 +1,6 @@
 import React from 'react'
-import Navbar from '../../components/user/navbar/Navbar'
-import Profile from '../../components/user/profile/Profile'
+import Navbar from '../../../components/user/navbar/Navbar'
+import Profile from '../../../components/user/profile/Profile'
 
 function ProfilePage() {
   return (

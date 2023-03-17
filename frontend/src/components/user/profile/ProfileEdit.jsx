@@ -2,9 +2,11 @@ import axios from "../../../axios";
 import React, { useEffect, useState } from "react";
 import { Formik, useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function ProfileEdit() {
   const user = JSON.parse(localStorage.getItem("user"));
+  const {userDetails} = useSelector((state)=> state.user)
   const [data,setData] = useState({})
   const navigate = useNavigate();
   useEffect(() => {
@@ -16,8 +18,8 @@ function ProfileEdit() {
       })
       .then((res) => {
         setData(res.data.user);
-      }, []);
-  });
+      });
+  },[]);
 
   const onSubmit = async (values, actions) => {
     console.log(values);
@@ -48,9 +50,9 @@ function ProfileEdit() {
   const { values, isSubmitting, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
-        fullName: '',
-        email: '',
-        about: "",
+        fullName: userDetails.fullName,
+        email: userDetails.email,
+        about: userDetails.about,
       },
       onSubmit,
     });

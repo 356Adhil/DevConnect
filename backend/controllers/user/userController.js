@@ -3,6 +3,7 @@ const User = require("../../models/userModel");
 const jwt = require("jsonwebtoken");
 const { find } = require("../../models/userModel");
 const secretKey = "secret"; // set your own secret key here
+const Article = require('../../models/articleModal')
 
 const cloudinary = require("cloudinary").v2;
 
@@ -96,7 +97,23 @@ console.log(id);
     console.error(error);
   }
 
-  }
+  },
+
+  postArticle: async (req, res) => {
+    title = req.body.title;
+    content = req.body.content;
+    try {
+        const article = await Article.create({
+          title:title,
+          content:content
+        });
+        return res.status(200).json({title, content, message: "Article Created" });
+
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
 
 
 };

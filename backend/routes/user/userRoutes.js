@@ -10,4 +10,8 @@ router.post('/login',userController.postLogin)
 router.get("/getProfile",verify,userController.getProfile)
 
 router.post('/editprofile',verify,userController.postEditProfile)
+
+router.post('/articles',userController.postArticle)
+
+
 module.exports = { router };

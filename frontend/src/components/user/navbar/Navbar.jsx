@@ -6,6 +6,7 @@ import Signup from "../signup/Signup";
 import Login from "../login/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setUserDetails } from "../../../Redux/features/userSlice";
 // import { useSelector } from "react-redux";
 
 
@@ -15,13 +16,17 @@ function Navbar() {
   const [hamburg, setHamburg] = useState(true);
   const [showLogin, setShowLogin] = useState(false)
   const [showSignup, setShowSignup] = useState(false)
-  const user = useSelector((state) => state.user);
+  
+  const {userDetails} = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+
+
   function HandleLogout(){
     localStorage.removeItem("user");
-    dispatch({type:"USER_LOGOUT"});
+    dispatch(setUserDetails(null))
     navigate('/')
   };
   
@@ -101,7 +106,7 @@ function Navbar() {
               <li className="hover:text-secondary-200 py-2 cursor-pointer">
                 <span>Events</span>
               </li>
-              <li className="hover:text-secondary-200 py-2 cursor-pointer">
+              <li onClick={()=>{navigate('/articles')}} className="hover:text-secondary-200 py-2 cursor-pointer">
                 <span>Articles</span>
               </li>
               <li className="hover:text-secondary-200 py-2 cursor-pointer">
@@ -114,25 +119,25 @@ function Navbar() {
             className={`${hamburg ? "hidden md:block" : " flex items-center"}`}
           >
             <ul className="flex gap-3 items-center">
-              {!user &&
+              {!userDetails &&
               <li onClick={handleLogin}>
                 <button className="border-transparent items-center border-2 bg-secondary hover:bg-primary text-primary hover:border-white hover:text-white md:py-2 md:pr-5 md:pl-5 py-1 pr-4 pl-4 rounded-full">
                   Login
                 </button>
               </li>
               }
-              {!user &&
+              {!userDetails &&
               <li onClick={handleSignup}>
                 <button>Sign Up</button>
               </li>
               }
 
-              {user &&
+              {userDetails &&
               <li onClick={HandleLogout}>
                 <button>Logout</button>
               </li>
               }
-              {user &&
+              {userDetails &&
               <li onClick={handleProfile}>
                 <button>Profile</button>
               </li>

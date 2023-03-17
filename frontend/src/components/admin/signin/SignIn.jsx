@@ -12,6 +12,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import store from "../../../Redux/store";
+import { setAdminDetails } from "../../../Redux/features/adminSlice";
 
 
 export function SignIn() {
@@ -35,8 +36,7 @@ export function SignIn() {
       const json = response.data;
       localStorage.setItem("admin", JSON.stringify(json));
 
-      dispatch({ type: "ADMIN_LOGIN", payload: json });
-      console.log(store.getState());
+      dispatch(setAdminDetails(json));
     } catch (error) {
       console.error(error); // handle the error
     }

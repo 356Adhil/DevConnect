@@ -2,15 +2,18 @@ import axios from "../../../axios";
 import React, { useEffect, useState } from "react";
 import profile from "../../../assets/Profile.jpg";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserDetails } from "../../../Redux/features/userSlice";
 
 export default function Profile() {
 
     const user = JSON.parse(localStorage.getItem("user"))
       const navigate = useNavigate();
+      const dispatch = useDispatch()
 
-    const [userName,setUserName] = useState('')
-    const [about,setAbout] = useState('')
-    const [email,setEmail] = useState('')
+    const {userDetails} = useSelector((state)=> state.user)
+  console.log(userDetails)
+
     useEffect(() => {
       axios
         .get("http://localhost:4000/getProfile", {
@@ -19,11 +22,9 @@ export default function Profile() {
           },
         })
         .then((res) => {
-          setUserName(res.data.user.fullName)
-          setAbout(res.data.user.about)
-          setEmail(res.data.user.email)
-        }, []);
-    });
+          dispatch(setUserDetails(res.data.user))
+        });
+    },[]);
     
     const [showEditProfile,setShowEditProfile] = useState(false)
 
@@ -116,21 +117,21 @@ export default function Profile() {
                 </div>
                 <div className="text-center mt-12">
                   <h3 className="text-4xl font-semibold leading-normal text-gray-800 mb-2">
-                    {userName}
+                    {userDetails?.fullName}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>{" "}
                     {'user.user.place'}
                   </div>
                   <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
-                    {email}
+                    {userDetails?.email}
                   </div>
                 </div>
                 <div className="mt-10 py-10 border-t border-gray-300 text-center">
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
                       <p className="mb-4 text-lg leading-relaxed text-gray-800">
-                      {about}
+                      {userDetails?.about}
                       </p>
                     </div>
                   </div>

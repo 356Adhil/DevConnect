@@ -3,7 +3,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { basicSchema } from "../../../schemas";
 import { useDispatch } from "react-redux";
-import store from "../../../Redux/store";
+import { setUserDetails } from "../../../Redux/features/userSlice";
 
 function Login() {
   const [showModal, setShowModal] = useState(true);
@@ -19,8 +19,7 @@ function Login() {
       console.log(localStorage.getItem("user"));
       
       // update the store
-      dispatch({ type: "USER_LOGIN", payload: json });
-      console.log(store.getState());
+      dispatch(setUserDetails(json));
       setShowModal(false)
     } catch (error) {
       console.log(error.response.data.message);
