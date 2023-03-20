@@ -103,17 +103,37 @@ console.log(id);
     title = req.body.title;
     content = req.body.content;
     try {
+      const id = req.id;
+      console.log(id,"schsdjjsdbvjsadohsjvbdjhsbdhjsvbdhsjbd")
+    const user = await User.findOne({ _id: id });
+    console.log(user.fullName)
         const article = await Article.create({
           title:title,
-          content:content
+          content:content,
+          userName:user.fullName
         });
-        return res.status(200).json({title, content, message: "Article Created" });
+        return res.status(200).json({article, message: "Article Created" });
 
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });
     }
   },
+
+  getArticle: async (req, res)=> {
+    try {
+      console.log('Article getting...')
+      Article.find().then((article) => {
+        
+        if (article) {
+          console.log('Article sending...')
+          res.send({ article });
+        }
+      });
+    } catch (error) {
+      console.error();
+    }
+  }
 
 
 };

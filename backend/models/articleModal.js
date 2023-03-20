@@ -8,7 +8,16 @@ const articleSchema = new mongoose.Schema({
     content: {
         type:String,
         required:true
-    }
+    },
+    userName: {
+        type:String
+    },
+    profile: {
+        type: String
+    },
+},
+{
+    timestamps: true
 });
 
 const Article = mongoose.model("Article", articleSchema);

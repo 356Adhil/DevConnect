@@ -1,37 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { Button } from "@material-tailwind/react";
 // import AddArticle from "./AddArticle";
 // import { useNavigate } from "react-router-dom";
 import axios from "../../../axios";
 import swal from 'sweetalert';
+import { useDispatch,useSelector } from "react-redux";
+import { setArticleData } from "../../../Redux/features/articleSlice";
+import profile from "../../../assets/Profile.jpg";
 
-function Articles() {
+function ArticlePage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refresh,setRefresh] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
     content: '',
   });
+  const dispatch = useDispatch();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
+  const {articleData} = useSelector((state)=> state.article)
+  const {userDetails} = useSelector((state) => state.user);
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:4000/articles', formData);
-      console.log(response)
+      const response = await axios.post('http://localhost:4000/articles', formData,{ headers: {
+        Authorization: user.token,
+      }},);
+      const data = response.data;
+      console.log(data)
+
+      // dispatch(setArticleData(data));
       setIsModalOpen(false);
-      swal("Yaay!", "Article Added Successfully", "success");
       setFormData({ title: '', content: '' });
+      window.location.reload()
     } catch (error) {
       console.error(error);
-      alert('Error adding article. Please try again later.');
+      swal("Oops!", "Error adding article. Please try again", "error");
     }
   };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/articles")
+      .then((res) => {
+        const articles = res.data.article
+        dispatch(setArticleData(articles))
+      
+      });
+  },[refresh]);
+
+  const articles = articleData
+  
 
   return (
     <>
@@ -65,6 +93,7 @@ function Articles() {
                 onChange={handleInputChange}
               ></textarea>
               <button
+              onClick={()=>{setRefresh(!refresh)}}
                 className="bg-primary text-white py-2 px-4 rounded-lg"
                 type="submit"
               >
@@ -85,37 +114,41 @@ function Articles() {
         <h1 className="flex text-3xl font-bold font-philosephor text-third">
           Articles
         </h1>
+        {userDetails &&
         <button
           className="text-white bg-primary p-2 px-3 rounded-lg"
           onClick={() => setIsModalOpen(true)}
         >
           Add Article
         </button>
+        }
       </div>
 
       <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-10 p-6 justify-center">
-        <div className="">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      {articles.map((article) => (
+        <div className="" >
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden h-56 w-full">
             <div className="bg-slate-500 text-white uppercase font-mono font-semibold text-lg p-4">
-              Article Name
+              {article.title}
             </div>
             <div className="p-4">
               <div className="flex items-center mb-4">
                 <img
                   className="h-6 w-6 rounded-full mr-2"
-                  src="https://randomuser.me/api/portraits/women/2.jpg"
+                  src={profile}
                   alt="Jane Smith"
                 />
-                <h2 className="text-sm font-medium">Jane Smith</h2>
+                <h2 className="text-sm font-medium">{article.userName}</h2>
               </div>
-              <p className="text-gray-600">Colorful blooms in the flowerbed</p>
+              <p className="text-gray-600">{article.content}</p>
             </div>
           </div>
         </div>
+         ))}
       </div>
     </>
 
   );
 }
 
-export default Articles;
+export default ArticlePage;

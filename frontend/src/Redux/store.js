@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import {persistReducer} from 'redux-persist';
 import { combineReducers } from "@reduxjs/toolkit";
 import { adminSlice } from "./features/adminSlice";
+import {articleSlice} from "./features/articleSlice";
 
 const persistConfig = {
   key: "root",
@@ -13,7 +14,8 @@ const persistConfig = {
 
 const reducer = combineReducers({
   user: userSlice.reducer,
-  admin: adminSlice.reducer
+  admin: adminSlice.reducer,
+  article: articleSlice.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig,reducer);

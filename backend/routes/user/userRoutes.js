@@ -11,7 +11,8 @@ router.get("/getProfile",verify,userController.getProfile)
 
 router.post('/editprofile',verify,userController.postEditProfile)
 
-router.post('/articles',userController.postArticle)
+router.post('/articles',verify,userController.postArticle)
 
+router.get('/articles',userController.getArticle)
 
 module.exports = { router };
