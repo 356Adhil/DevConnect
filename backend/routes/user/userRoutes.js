@@ -15,4 +15,8 @@ router.post('/articles',verify,userController.postArticle)
 
 router.get('/articles',userController.getArticle)
 
+router.post('/events',verify,userController.postEvent)
+
+router.get('/events',userController.getEvent)
+
 module.exports = { router };

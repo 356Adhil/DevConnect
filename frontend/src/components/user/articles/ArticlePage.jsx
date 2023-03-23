@@ -3,18 +3,19 @@ import React, { useEffect, useState } from "react";
 // import AddArticle from "./AddArticle";
 // import { useNavigate } from "react-router-dom";
 import axios from "../../../axios";
-import swal from 'sweetalert';
-import { useDispatch,useSelector } from "react-redux";
+import swal from "sweetalert";
+import { useDispatch, useSelector } from "react-redux";
 import { setArticleData } from "../../../Redux/features/articleSlice";
 import profile from "../../../assets/Profile.jpg";
+import { useNavigate } from "react-router-dom";
+import articleCover from "../../../assets/articleCover.webp";
 
 function ArticlePage() {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [refresh,setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
+    title: "",
+    content: "",
   });
   const dispatch = useDispatch();
 
@@ -23,25 +24,35 @@ function ArticlePage() {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  const {articleData} = useSelector((state)=> state.article)
-  const {userDetails} = useSelector((state) => state.user);
+  const { articleData } = useSelector((state) => state.article);
+  const { userDetails } = useSelector((state) => state.user);
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
 
-  
+  function handleClick(article) {
+    navigate("/single-article", { state: { article } });
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:4000/articles', formData,{ headers: {
-        Authorization: user.token,
-      }},);
+      const response = await axios.post(
+        "http://localhost:4000/articles",
+        formData,
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        }
+      );
       const data = response.data;
-      console.log(data)
+      console.log(data);
 
       // dispatch(setArticleData(data));
       setIsModalOpen(false);
-      setFormData({ title: '', content: '' });
-      window.location.reload()
+      setFormData({ title: "", content: "" });
+      window.location.reload();
     } catch (error) {
       console.error(error);
       swal("Oops!", "Error adding article. Please try again", "error");
@@ -49,17 +60,13 @@ function ArticlePage() {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/articles")
-      .then((res) => {
-        const articles = res.data.article
-        dispatch(setArticleData(articles))
-      
-      });
-  },[refresh]);
+    axios.get("http://localhost:4000/articles").then((res) => {
+      const articles = res.data.article;
+      dispatch(setArticleData(articles));
+    });
+  }, [refresh]);
 
-  const articles = articleData
-  
+  const articles = articleData;
 
   return (
     <>
@@ -93,7 +100,9 @@ function ArticlePage() {
                 onChange={handleInputChange}
               ></textarea>
               <button
-              onClick={()=>{setRefresh(!refresh)}}
+                onClick={() => {
+                  setRefresh(!refresh);
+                }}
                 className="bg-primary text-white py-2 px-4 rounded-lg"
                 type="submit"
               >
@@ -114,40 +123,58 @@ function ArticlePage() {
         <h1 className="flex text-3xl font-bold font-philosephor text-third">
           Articles
         </h1>
-        {userDetails &&
-        <button
-          className="text-white bg-primary p-2 px-3 rounded-lg"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Add Article
-        </button>
-        }
+        {userDetails && (
+          <button
+            className="text-white bg-primary p-2 px-3 rounded-lg"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Add Article
+          </button>
+        )}
       </div>
 
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-10 p-6 justify-center">
-      {articles.map((article) => (
-        <div className="" >
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden h-56 w-full">
-            <div className="bg-slate-500 text-white uppercase font-mono font-semibold text-lg p-4">
-              {article.title}
-            </div>
-            <div className="p-4">
-              <div className="flex items-center mb-4">
-                <img
-                  className="h-6 w-6 rounded-full mr-2"
-                  src={profile}
-                  alt="Jane Smith"
-                />
-                <h2 className="text-sm font-medium">{article.userName}</h2>
-              </div>
-              <p className="text-gray-600">{article.content}</p>
-            </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-8">
+  {articles.map((article) => (
+    <div key={article._id} className="bg-white shadow-md rounded-md overflow-hidden flex flex-col cursor-pointer" onClick={()=> handleClick(article)}>
+      <img src={articleCover} alt="Article Image" className="w-full hover:shadow-lg" />
+      <div className="px-4 py-3 flex-grow">
+        <h2 className="text-xl font-medium mb-2">{article.title}</h2>
+        <div className="h-20 overflow-hidden">
+        <p className="text-gray-700 text-base mb-4">
+          {article.content.length > 150
+            ? article.content.slice(0, 150) + "... "
+            : article.content}
+          {article.content.length > 150 && (
+            <button
+              className="text-blue-600 hover:underline text-sm"
+              onClick={()=> handleClick(article)}
+            >
+              See More
+            </button>
+          )}
+        </p>
+        </div>
+      </div>
+      <div className="mt-auto px-4 py-3">
+        <div className="flex items-center">
+          <img
+            src={profile}
+            alt="Author Image"
+            className="w-10 h-10 rounded-full mr-2"
+          />
+          <div>
+            <p className="text-gray-900 font-medium">{article.userName}</p>
+            <p className="text-gray-600 text-sm">
+              Published on {article.createdDate}
+            </p>
           </div>
         </div>
-         ))}
       </div>
-    </>
+    </div>
+  ))}
+</div>
 
+    </>
   );
 }
 

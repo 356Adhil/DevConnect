@@ -103,7 +103,7 @@ function Navbar() {
               <li className="hover:text-secondary-200 py-2 cursor-pointer">
                 <span>Community</span>
               </li>
-              <li className="hover:text-secondary-200 py-2 cursor-pointer">
+              <li onClick={()=>{navigate('/events')}} className="hover:text-secondary-200 py-2 cursor-pointer">
                 <span>Events</span>
               </li>
               <li onClick={()=>{navigate('/articles')}} className="hover:text-secondary-200 py-2 cursor-pointer">

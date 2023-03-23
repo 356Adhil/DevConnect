@@ -15,10 +15,15 @@ const articleSchema = new mongoose.Schema({
     profile: {
         type: String
     },
+      createdDate: {
+        type: String,
+        default: () => new Date().toISOString().substr(0, 10)
+      }
 },
 {
     timestamps: true
-});
+}
+);
 
 const Article = mongoose.model("Article", articleSchema);
 

@@ -10,6 +10,8 @@ import ProfileEditPage from "./pages/user/profile/ProfileEditPage";
 import SignIn from "./components/admin/signin/SignIn";
 import Private from './privateRoutes/userRouter'
 import ArticlePages from "./pages/user/articles/ArticlePage";
+import ArticleSinglePage from "./pages/user/articles/ArticleSinglePage";
+import EventPage from "./pages/user/events/EventPage";
 
 
 function App() {
@@ -27,9 +29,13 @@ function App() {
 
         <Route path="/articles" exact element={<ArticlePages />} />
         
+        <Route path="/single-article" exact element={<ArticleSinglePage />} />
+
         <Route path="/profile" exact element={<Private> <ProfilePage /> </Private>} />
 
         <Route path="/editprofile" exact element={<ProfileEditPage />} />
+
+        <Route path="/events" exact element={<EventPage />} />
         
       </Routes>
       </BrowserRouter>

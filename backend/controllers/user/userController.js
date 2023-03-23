@@ -3,7 +3,8 @@ const User = require("../../models/userModel");
 const jwt = require("jsonwebtoken");
 const { find } = require("../../models/userModel");
 const secretKey = "secret"; // set your own secret key here
-const Article = require('../../models/articleModal')
+const Article = require("../../models/articleModal");
+const Events = require("../../models/eventsModel");
 
 const cloudinary = require("cloudinary").v2;
 
@@ -67,9 +68,8 @@ module.exports = {
   getProfile: (req, res) => {
     try {
       const id = req.id;
-console.log(id);
+      console.log(id);
       User.findOne({ _id: id }).then((user) => {
-
         if (user) {
           res.send({ user });
         }
@@ -79,24 +79,26 @@ console.log(id);
     }
   },
 
-  postEditProfile: async (req,res) =>{
-    console.log('hi.....hi')
-    console.log(req.body)
-   const fullName = req.body.fullName;
-  const email = req.body.email;
-  const about = req.body.about;
-  try {
-    const id = req.id;
-    const user = await User.findOne({ _id: id });
-    if (user) {
-      await User.updateOne({ _id: id },{fullName:fullName, email:email, about:about});
-      console.log("updated....");
-      res.send({ user });
+  postEditProfile: async (req, res) => {
+    console.log("hi.....hi");
+    console.log(req.body);
+    const fullName = req.body.fullName;
+    const email = req.body.email;
+    const about = req.body.about;
+    try {
+      const id = req.id;
+      const user = await User.findOne({ _id: id });
+      if (user) {
+        await User.updateOne(
+          { _id: id },
+          { fullName: fullName, email: email, about: about }
+        );
+        console.log("updated....");
+        res.send({ user });
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
-
   },
 
   postArticle: async (req, res) => {
@@ -104,36 +106,73 @@ console.log(id);
     content = req.body.content;
     try {
       const id = req.id;
-      console.log(id,"schsdjjsdbvjsadohsjvbdjhsbdhjsvbdhsjbd")
-    const user = await User.findOne({ _id: id });
-    console.log(user.fullName)
-        const article = await Article.create({
-          title:title,
-          content:content,
-          userName:user.fullName
-        });
-        return res.status(200).json({article, message: "Article Created" });
-
+      console.log(id, "schsdjjsdbvjsadohsjvbdjhsbdhjsvbdhsjbd");
+      const user = await User.findOne({ _id: id });
+      console.log(user.fullName);
+      const article = await Article.create({
+        title: title,
+        content: content,
+        userName: user.fullName,
+      });
+      return res.status(200).json({ article, message: "Article Created" });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });
     }
   },
 
-  getArticle: async (req, res)=> {
+  getArticle: async (req, res) => {
     try {
-      console.log('Article getting...')
+      console.log("Article getting...");
       Article.find().then((article) => {
-        
         if (article) {
-          console.log('Article sending...')
+          console.log("Article sending...");
           res.send({ article });
         }
       });
     } catch (error) {
       console.error();
     }
-  }
+  },
 
+  postEvent: async (req, res) => {
+    const data = req.body;
 
+    const inputDate = data.date;
+    const dateObj = new Date(inputDate);
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
+
+    try {
+      const id = req.id;
+      console.log(id, "hi");
+      const user = await User.findOne({ _id: id });
+      console.log(user.fullName, user._id);
+      const events = await Events.create({
+        title: data.title,
+        description: data.description,
+        userId: user._id,
+        eventDate: formattedDate,
+        category: data.category,
+      });
+      return res.status(200).json({ events, message: "Event Created" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
+  getEvent: async (req, res) => {
+    try {
+      Events.find().then((events) => {
+        if (events) {
+          res.send({ events });
+        }
+      });
+    } catch (error) {
+      console.error();
+    }
+  },
 };
