@@ -24,14 +24,13 @@ const Events = () => {
       .then((response) => {
         console.log(response.data.events);
         setEvents(response.data.events);
-        // dispatch(setEventData(response.data.events));
+        dispatch(setEventData(response.data));
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  const eventss = eventData;
 
   return (
     <div className="container mx-auto md:p-10 sm:p-5">
@@ -46,9 +45,9 @@ const Events = () => {
           </button>
         )}
       </div>
-      {eventss ? (
+      {eventData ? (
         <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mt-11">
-          {events.map((event) => (
+          {eventData?.map((event) => (
             <div
               key={event._id}
               className="bg-white border-b-2 border-x-2 overflow-hidden"
@@ -76,7 +75,6 @@ const Events = () => {
       {showModal && (
         <EventAddModal
           onClose={() => setShowModal(false)}
-          onAddEvent={handleAddEvent}
         />
       )}
     </div>

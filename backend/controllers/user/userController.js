@@ -52,8 +52,6 @@ module.exports = {
       const user = await User.findOne({ email, password });
 
       if (user) {
-        console.log(user);
-        console.log("userDetails......:", user);
         const token = createToken(user._id);
         return res.status(200).json({ email, token, user });
       } else {
@@ -68,7 +66,6 @@ module.exports = {
   getProfile: (req, res) => {
     try {
       const id = req.id;
-      console.log(id);
       User.findOne({ _id: id }).then((user) => {
         if (user) {
           res.send({ user });
@@ -80,8 +77,6 @@ module.exports = {
   },
 
   postEditProfile: async (req, res) => {
-    console.log("hi.....hi");
-    console.log(req.body);
     const fullName = req.body.fullName;
     const email = req.body.email;
     const about = req.body.about;
@@ -93,7 +88,6 @@ module.exports = {
           { _id: id },
           { fullName: fullName, email: email, about: about }
         );
-        console.log("updated....");
         res.send({ user });
       }
     } catch (error) {
@@ -106,9 +100,7 @@ module.exports = {
     content = req.body.content;
     try {
       const id = req.id;
-      console.log(id, "schsdjjsdbvjsadohsjvbdjhsbdhjsvbdhsjbd");
       const user = await User.findOne({ _id: id });
-      console.log(user.fullName);
       const article = await Article.create({
         title: title,
         content: content,
@@ -123,10 +115,8 @@ module.exports = {
 
   getArticle: async (req, res) => {
     try {
-      console.log("Article getting...");
       Article.find().then((article) => {
         if (article) {
-          console.log("Article sending...");
           res.send({ article });
         }
       });
@@ -147,9 +137,7 @@ module.exports = {
 
     try {
       const id = req.id;
-      console.log(id, "hi");
       const user = await User.findOne({ _id: id });
-      console.log(user.fullName, user._id);
       const events = await Events.create({
         title: data.title,
         description: data.description,
@@ -166,13 +154,10 @@ module.exports = {
 
   getEvent: async (req, res) => {
     try {
-      Events.find().then((events) => {
-        if (events) {
-          res.send({ events });
-        }
-      });
+      const events = await Events.find();
+        res.json( events ).status(200)
     } catch (error) {
-      console.error();
+      console.error(error);
     }
-  },
+  },  
 };

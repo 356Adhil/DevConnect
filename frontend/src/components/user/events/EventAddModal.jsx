@@ -1,8 +1,12 @@
 import axios from "../../../axios";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setEventData } from '../../../Redux/features/eventSlice'
 
-function EventAddModal({ onClose, onAddEvent }) {
-  const [eventData, setEventData] = useState({
+function EventAddModal({ onClose }) {
+
+  const dispatch = useDispatch()
+  const [eventData, setEventDatas] = useState({
     title: "",
     category: "",
     date: "",
@@ -11,25 +15,28 @@ function EventAddModal({ onClose, onAddEvent }) {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setEventData((prevEventData) => ({ ...prevEventData, [name]: value }));
+    console.log(value)
+    setEventDatas((prevEventData) => ({ ...prevEventData, [name]: value }));
   };
   const user = JSON.parse(localStorage.getItem("user"));
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    await axios
-      .post("http://localhost:4000/events", eventData, {
+    try {
+      event.preventDefault();
+      const res = await axios.post("http://localhost:4000/events", eventData, {
         headers: {
           Authorization: user.token,
         },
-      })
-      .then((response) => {
-        console.log(response);
-        onAddEvent(eventData);
-        onClose();
       });
+      const response = await axios.get("http://localhost:4000/events");
+      console.log(response.data, "ggggggg");
+      dispatch(setEventData(response.data));
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
-
+  
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
       <div className="bg-white rounded-lg overflow-hidden sm:w-1/2">
@@ -48,7 +55,7 @@ function EventAddModal({ onClose, onAddEvent }) {
                 id="title"
                 type="text"
                 name="title"
-                value={eventData.title}
+                value={eventData?.title}
                 onChange={handleInputChange}
                 required
               />
@@ -65,7 +72,7 @@ function EventAddModal({ onClose, onAddEvent }) {
                 id="category"
                 type="text"
                 name="category"
-                value={eventData.category}
+                value={eventData?.category}
                 onChange={handleInputChange}
                 required
               />
@@ -82,7 +89,7 @@ function EventAddModal({ onClose, onAddEvent }) {
                 id="date"
                 type="date"
                 name="date"
-                value={eventData.date}
+                value={eventData?.date}
                 onChange={handleInputChange}
                 required
               />
@@ -98,7 +105,7 @@ function EventAddModal({ onClose, onAddEvent }) {
                 className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="description"
                 name="description"
-                value={eventData.description}
+                value={eventData?.description}
                 onChange={handleInputChange}
                 required
               />

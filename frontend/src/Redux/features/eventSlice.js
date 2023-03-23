@@ -8,7 +8,7 @@ export const eventSlice = createSlice({
     },
     reducers: {
         setEventData: (state,action) => {
-            console.log(action)
+            console.log(action.payload,"from Slice")
             state.eventData = action.payload
         }
     }
