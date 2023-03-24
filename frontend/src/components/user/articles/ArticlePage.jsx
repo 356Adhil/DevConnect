@@ -17,12 +17,18 @@ function ArticlePage() {
     title: "",
     content: "",
   });
+  const [formImg, setFormImg] = useState(null)
   const dispatch = useDispatch();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
+
+  const handleImageChange = (event) => {
+    console.log(event.target.files[0])
+    setFormImg(event.target.files[0])
+  }
 
   const { articleData } = useSelector((state) => state.article);
   const { userDetails } = useSelector((state) => state.user);
@@ -37,12 +43,17 @@ function ArticlePage() {
     event.preventDefault();
 
     try {
+      let form = new FormData
+      form.append('title',formData.title)
+      form.append('content',formData.content)
+      form.append('image',formImg)
       const response = await axios.post(
         "http://localhost:4000/articles",
-        formData,
+        form,
         {
           headers: {
             Authorization: user.token,
+            "Content-Type": "multipart/form-data"
           },
         }
       );
@@ -87,6 +98,18 @@ function ArticlePage() {
                 value={formData.title}
                 onChange={handleInputChange}
               />
+
+              <label className="text-sm font-medium" htmlFor="coverImage">
+                Cover Image
+              </label>
+              <input
+                className="border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="coverImage"
+                name="image"
+                type="file"
+                onChange={handleImageChange}
+              />
+
               <label className="text-sm font-medium" htmlFor="content">
                 Content
               </label>

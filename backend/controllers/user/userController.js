@@ -6,14 +6,6 @@ const secretKey = "secret"; // set your own secret key here
 const Article = require("../../models/articleModal");
 const Events = require("../../models/eventsModel");
 
-const cloudinary = require("cloudinary").v2;
-
-cloudinary.config({
-  cloud_name: "dryuwxaf6",
-  api_key: "683424611214174",
-  api_secret: "nEppa5gn66QyzHp4Wtp4izq-raE",
-});
-
 const createToken = (_id) => {
   return jwt.sign({ _id }, secretKey, { expiresIn: "1d" });
 };
@@ -96,6 +88,7 @@ module.exports = {
   },
 
   postArticle: async (req, res) => {
+    console.log(req.file)
     title = req.body.title;
     content = req.body.content;
     try {
