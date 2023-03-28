@@ -4,6 +4,7 @@ import cover1 from "../../../assets/cover1.jpg";
 import EventAddModal from "./EventAddModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setEventData } from "../../../Redux/features/eventSlice";
+import instance from "../../../axios";
 
 const Events = () => {
   const [showModal, setShowModal] = useState(false);
@@ -19,8 +20,8 @@ const Events = () => {
   const { userDetails } = useSelector((state) => state.user);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/events")
+    instance
+      .get("/events")
       .then((response) => {
         console.log(response.data.events);
         setEvents(response.data.events);

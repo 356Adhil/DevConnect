@@ -4,6 +4,7 @@ import { Formik, useFormik } from "formik";
 import { basicSchema } from "../../../schemas";
 import axios from "axios";
 import Login from "../login/Login";
+import instance from "../../../axios";
 
 
 function Signup() {
@@ -15,7 +16,7 @@ function Signup() {
   const onSubmit = async (values, actions) => {
   console.log(values);
     try {
-      const response = await axios.post('http://localhost:4000/signup', values);
+      const response = await instance.post('/signup', values);
       console.log(response);
       const success = response.data.message;
       swal("Yaay!", success, "success");

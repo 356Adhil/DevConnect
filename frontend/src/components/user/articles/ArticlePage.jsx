@@ -10,6 +10,7 @@ import profile from "../../../assets/Profile.jpg";
 import { useNavigate } from "react-router-dom";
 import articleCover from "../../../assets/articleCover.webp";
 import JoditEditor from "jodit-react";
+import instance from "../../../axios";
 
 function ArticlePage() {
   const editor = useRef(null);
@@ -52,8 +53,8 @@ function ArticlePage() {
       form.append("content", content);
       // form.append('image',formImg)
 
-      const response = await axios.post(
-        "http://localhost:4000/articles",
+      const response = await instance.post(
+        "/articles",
         form,
         {
           headers: {
@@ -77,7 +78,7 @@ function ArticlePage() {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:4000/articles").then((res) => {
+    instance.get("/articles").then((res) => {
       const articles = res.data.article;
       dispatch(setArticleData(articles));
     });

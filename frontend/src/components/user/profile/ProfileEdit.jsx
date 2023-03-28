@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Formik, useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import instance from "../../../axios";
 
 function ProfileEdit() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -10,8 +11,8 @@ function ProfileEdit() {
   const [data,setData] = useState({})
   const navigate = useNavigate();
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/getProfile", {
+    instance
+      .get("/getProfile", {
         headers: {
           Authorization: user.token,
         },
@@ -24,8 +25,8 @@ function ProfileEdit() {
   const onSubmit = async (values, actions) => {
     console.log(values);
     try {
-      const response = await axios.post(
-        "http://localhost:4000/editprofile",
+      const response = await instance.post(
+        "/editprofile",
         {
           fullName: values.fullName,
           email: values.email,

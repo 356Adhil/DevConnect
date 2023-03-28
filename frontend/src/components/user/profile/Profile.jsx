@@ -4,6 +4,7 @@ import profile from "../../../assets/Profile.jpg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "../../../Redux/features/userSlice";
+import instance from "../../../axios";
 
 export default function Profile() {
 
@@ -15,8 +16,8 @@ export default function Profile() {
   console.log(userDetails)
 
     useEffect(() => {
-      axios
-        .get("http://localhost:4000/getProfile", {
+      instance
+        .get("/getProfile", {
           headers: {
             Authorization: user.token,
           },

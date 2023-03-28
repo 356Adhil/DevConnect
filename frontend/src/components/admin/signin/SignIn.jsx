@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import store from "../../../Redux/store";
 import { setAdminDetails } from "../../../Redux/features/adminSlice";
+import instance from "../../../axios";
 
 
 export function SignIn() {
@@ -28,8 +29,8 @@ export function SignIn() {
     event.preventDefault(); // prevent the default form submit behavior
 
     try {
-      const response = await axios.post(
-        "http://localhost:4000/admin",
+      const response = await instance.post(
+        "/admin",
         formData
       ); // send the form data to the backend using axios.post
       console.log(response.data); // log the response data

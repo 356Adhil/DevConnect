@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { basicSchema } from "../../../schemas";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../../Redux/features/userSlice";
+import instance from "../../../axios";
 
 function Login() {
   const [showModal, setShowModal] = useState(true);
@@ -11,7 +12,7 @@ function Login() {
 
   const onSubmit = async (values, actions) => {
     try {
-      const response = await axios.post("http://localhost:4000/login", values);
+      const response = await instance.post("/login", values);
       const json = response.data;
       console.log("response data...............:",response.data);
       // save user to local storage

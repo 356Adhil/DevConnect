@@ -2,6 +2,7 @@ import axios from "../../../axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setEventData } from '../../../Redux/features/eventSlice'
+import instance from "../../../axios";
 
 function EventAddModal({ onClose }) {
 
@@ -23,12 +24,12 @@ function EventAddModal({ onClose }) {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const res = await axios.post("http://localhost:4000/events", eventData, {
+      const res = await instance.post("/events", eventData, {
         headers: {
           Authorization: user.token,
         },
       });
-      const response = await axios.get("http://localhost:4000/events");
+      const response = await instance.get("/events");
       console.log(response.data, "ggggggg");
       dispatch(setEventData(response.data));
       onClose();
