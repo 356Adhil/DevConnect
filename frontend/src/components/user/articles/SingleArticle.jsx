@@ -32,7 +32,8 @@ function SingleArticle() {
       <h1 className="text-3xl font-bold my-4">{article.title}</h1>
       <img src={articleCover} alt={article.title} className="w-full h-64 object-cover" />
       <div className="mt-4 prose">
-        <p>{article.content}</p>
+          <div  dangerouslySetInnerHTML={{ __html: article.content }}></div>
+        
       </div>
     </div>
     );

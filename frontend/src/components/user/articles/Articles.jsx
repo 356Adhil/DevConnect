@@ -62,10 +62,9 @@ function Articles() {
         <h2 className="text-xl font-medium mb-2">{article.title}</h2>
         <div className="h-20 overflow-hidden">
         <p className="text-gray-700 text-base mb-4">
-          {article.content.length > 150
-            ? article.content.slice(0, 150) + "... "
-            : article.content}
-          {article.content.length > 150 && (
+        <div dangerouslySetInnerHTML={{ __html: article.content.slice(0, 140) + '...' }}></div>
+
+          {article.content.length > 140 && (
             <button
               className="text-blue-600 hover:underline text-sm"
               onClick={()=> handleClick(article)}

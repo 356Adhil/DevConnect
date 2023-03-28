@@ -88,7 +88,6 @@ module.exports = {
   },
 
   postArticle: async (req, res) => {
-    console.log(req.file)
     title = req.body.title;
     content = req.body.content;
     try {

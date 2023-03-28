@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // import { Button } from "@material-tailwind/react";
 // import AddArticle from "./AddArticle";
 // import { useNavigate } from "react-router-dom";
@@ -9,15 +9,20 @@ import { setArticleData } from "../../../Redux/features/articleSlice";
 import profile from "../../../assets/Profile.jpg";
 import { useNavigate } from "react-router-dom";
 import articleCover from "../../../assets/articleCover.webp";
+import JoditEditor from 'jodit-react';
 
 function ArticlePage() {
+
+  const editor = useRef(null);
+	const [content, setContent] = useState('');
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
   });
-  const [formImg, setFormImg] = useState(null)
+  // const [formImg, setFormImg] = useState(null)
   const dispatch = useDispatch();
 
   const handleInputChange = (event) => {
@@ -25,10 +30,9 @@ function ArticlePage() {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  const handleImageChange = (event) => {
-    console.log(event.target.files[0])
-    setFormImg(event.target.files[0])
-  }
+  // const handleImageChange = (event) => {
+  //   setFormImg(event.target.files[0])
+  // }
 
   const { articleData } = useSelector((state) => state.article);
   const { userDetails } = useSelector((state) => state.user);
@@ -43,17 +47,19 @@ function ArticlePage() {
     event.preventDefault();
 
     try {
-      let form = new FormData
+      // console.log(formImg);
+      let form = new FormData()
       form.append('title',formData.title)
-      form.append('content',formData.content)
-      form.append('image',formImg)
+      form.append('content', content)
+      // form.append('image',formImg)
+   
       const response = await axios.post(
         "http://localhost:4000/articles",
         form,
         {
           headers: {
+            // 'Content-Type': 'multipart/form-data',
             Authorization: user.token,
-            "Content-Type": "multipart/form-data"
           },
         }
       );
@@ -63,6 +69,7 @@ function ArticlePage() {
       // dispatch(setArticleData(data));
       setIsModalOpen(false);
       setFormData({ title: "", content: "" });
+      // setFormImg(null)
       window.location.reload();
     } catch (error) {
       console.error(error);
@@ -99,29 +106,32 @@ function ArticlePage() {
                 onChange={handleInputChange}
               />
 
-              <label className="text-sm font-medium" htmlFor="coverImage">
+              {/* <label className="text-sm font-medium" htmlFor="image">
                 Cover Image
               </label>
               <input
                 className="border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="coverImage"
+                id="image"
                 name="image"
                 type="file"
-                onChange={handleImageChange}
-              />
+                onChange={((event)=>{
+                  event.preventDefault()
+                  handleImageChange(event)
+                })}
+                accept="image/*"
+                required
+              /> */}
 
               <label className="text-sm font-medium" htmlFor="content">
                 Content
               </label>
-              <textarea
-                className="border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="content"
-                name="content"
-                rows="5"
-                placeholder="Enter article content"
-                value={formData.content}
-                onChange={handleInputChange}
-              ></textarea>
+              
+              <JoditEditor 
+              ref={editor}
+              value={content}
+              onChange={newContent=>setContent(newContent)}
+              />
+      
               <button
                 onClick={() => {
                   setRefresh(!refresh);
@@ -164,10 +174,9 @@ function ArticlePage() {
         <h2 className="text-xl font-medium mb-2">{article.title}</h2>
         <div className="h-20 overflow-hidden">
         <p className="text-gray-700 text-base mb-4">
-          {article.content.length > 150
-            ? article.content.slice(0, 150) + "... "
-            : article.content}
-          {article.content.length > 150 && (
+        <div dangerouslySetInnerHTML={{ __html: article.content.slice(0, 140) + '...' }}></div>
+
+          {article.content.length > 140 && (
             <button
               className="text-blue-600 hover:underline text-sm"
               onClick={()=> handleClick(article)}
