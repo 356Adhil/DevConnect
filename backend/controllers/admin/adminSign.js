@@ -4,6 +4,7 @@ require("dotenv").config();
 const adminMail = "admin@gmail.com";
 const adminPass = "110011";
 const User = require("../../models/userModel");
+const Event = require("../../models/eventsModel");
 
 module.exports = {
   adminPostSign: async (req, res) => {
@@ -30,7 +31,7 @@ module.exports = {
   blockUser: (req, res) => {
     try {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       let value;
       User.findById(id).then((data) => {
         if (data.isBlock === true) {
@@ -48,4 +49,44 @@ module.exports = {
       console.error();
     }
   },
+
+  adminGetEvents: async (req, res) => {
+    try {
+      const events = await Event.find();
+      const eventsWithCreatorDetails = await Promise.all(
+        events.map(async (event) => {
+          const creator = await User.findOne({ _id: event.userId });
+          return { ...event.toObject(), creator };
+        })
+      );
+      res.send(eventsWithCreatorDetails);
+    } catch (error) {
+      res.status(500).send({ message: "Error getting events", error });
+    }
+  },
+
+  approveEvent: (req, res) => {
+    try {
+      const id = req.params.id;
+      console.log(id);
+      let value;
+      Event.findById(id).then((data) => {
+        console.log(data)
+        if (data.isApproved === true) {
+          value = false;
+        } else {
+          value = true;
+        }
+        Event.findByIdAndUpdate(id, { isApproved: value }).then((event) => {
+          if (event) {
+            console.log(event)
+            res.send({ succes: true });
+          }
+        });
+      });
+    } catch (error) {
+      console.error();
+    }
+  },
+
 };

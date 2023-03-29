@@ -17,6 +17,7 @@ import AdminUsers from "./pages/admin/home/AdminUsers";
 import AdminPrivate from './privateRoutes/adminRouter'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AdminEvents from './pages/admin/events/AdminEvents';
 
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
          <Route path="/admin" exact element={<AdminPrivate> <SignIn /> </AdminPrivate>} /> 
 
          <Route path="/admin-users" exact element={<AdminPrivate> <AdminUsers /> </AdminPrivate>} /> 
+
+         <Route path="/admin/events" exact element={ <AdminEvents/> } /> 
 
         <Route path="/" exact element={<Home />} />
 

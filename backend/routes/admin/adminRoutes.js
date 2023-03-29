@@ -8,4 +8,8 @@ router.get('/admin/getusers',adminSign.adminGetUsers)
 
 router.get("/admin/blockuser/:id",adminSign.blockUser)
 
+router.get("/admin/getEvents",adminSign.adminGetEvents)
+
+router.get("/admin/approveEvent/:id",adminSign.approveEvent)
+
 module.exports=router

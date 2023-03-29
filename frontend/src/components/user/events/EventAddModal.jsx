@@ -17,7 +17,6 @@ function EventAddModal({ onClose }) {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    console.log(value)
     setEventDatas((prevEventData) => ({ ...prevEventData, [name]: value }));
   };
   const user = JSON.parse(localStorage.getItem("user"));
