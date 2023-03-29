@@ -35,6 +35,12 @@ export function SignIn() {
       ); // send the form data to the backend using axios.post
       console.log(response.data); // log the response data
       const json = response.data;
+      if(json){
+        navigate('/admin-users')
+      }
+      else{
+        navigate('/admin')
+      }
       localStorage.setItem("admin", JSON.stringify(json));
 
       dispatch(setAdminDetails(json));

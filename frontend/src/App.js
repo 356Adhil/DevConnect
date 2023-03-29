@@ -1,4 +1,5 @@
-import Home from "./pages/user/home/Home";
+// import HomeAdmin from "./components/admin/home/Home";
+import Home from './pages/user/home/Home'
 import {
   BrowserRouter,
   Routes,
@@ -12,6 +13,8 @@ import Private from './privateRoutes/userRouter'
 import ArticlePages from "./pages/user/articles/ArticlePage";
 import ArticleSinglePage from "./pages/user/articles/ArticleSinglePage";
 import EventPage from "./pages/user/events/EventPage";
+import AdminUsers from "./pages/admin/home/AdminUsers";
+import AdminPrivate from './privateRoutes/adminRouter'
 
 
 function App() {
@@ -22,8 +25,9 @@ function App() {
     <div>
       <BrowserRouter>
       <Routes>
-        {/* <Route path="/admin" exact element={<Users />} /> */}
-         <Route path="/admin" exact element={<SignIn />} /> 
+         <Route path="/admin" exact element={<AdminPrivate> <SignIn /> </AdminPrivate>} /> 
+
+         <Route path="/admin-users" exact element={<AdminPrivate> <AdminUsers /> </AdminPrivate>} /> 
 
         <Route path="/" exact element={<Home />} />
 

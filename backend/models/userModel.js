@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    fullName: {
+  fullName: {
     type: String,
     required: true,
   },
@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: Number,
-    required:true,
+    required: true,
   },
   password: {
     type: String,
@@ -21,14 +21,20 @@ const userSchema = new mongoose.Schema({
   about: {
     type: String,
   },
+  isBlock: {
+    type: Boolean,
+    default: false,
+  },
+  status: {
+    type: String,
+  },
   profilePic: {
     type: String,
-    default: "https://res.cloudinary.com/DevConnect_Profile/image/upload/v1623259449/default-profile-pic.png",
+    default:
+      "https://res.cloudinary.com/DevConnect_Profile/image/upload/v1623259449/default-profile-pic.png",
   },
 });
 
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
-
-

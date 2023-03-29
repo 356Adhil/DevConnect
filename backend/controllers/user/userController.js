@@ -44,8 +44,12 @@ module.exports = {
       const user = await User.findOne({ email, password });
 
       if (user) {
-        const token = createToken(user._id);
-        return res.status(200).json({ email, token, user });
+        if(user.isBlock == false ){
+          const token = createToken(user._id);
+          return res.status(200).json({ email, token, user });
+        } else {
+          return res.status(401).json({ message: "This account is blocked" });
+        }
       } else {
         return res.status(401).json({ message: "Invalid login credentials" });
       }

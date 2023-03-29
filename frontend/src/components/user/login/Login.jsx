@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import swal from 'sweetalert';
 import { useFormik } from "formik";
 import { basicSchema } from "../../../schemas";
 import { useDispatch } from "react-redux";
@@ -23,6 +23,7 @@ function Login() {
       dispatch(setUserDetails(json));
       setShowModal(false)
     } catch (error) {
+      swal("Oops!", error.response.data.message, "error");
       console.log(error.response.data.message);
     }
   };
