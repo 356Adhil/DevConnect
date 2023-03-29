@@ -48,7 +48,7 @@ module.exports = {
           const token = createToken(user._id);
           return res.status(200).json({ email, token, user });
         } else {
-          return res.status(401).json({ message: "This account has been blocked by admin" });
+          return res.status(401).json({ message: "This account has been blocked by admin !!" });
         }
       } else {
         return res.status(401).json({ message: "Invalid login credentials" });
@@ -67,7 +67,7 @@ module.exports = {
           if(user.isBlock == false ){
             res.send({ user });
           } else {
-            return res.status(401).json({ message: "This account has been blocked by admin" });
+            return res.status(401).json({ message: "This account has been blocked by admin !!" });
           }
         }
       });
@@ -91,7 +91,7 @@ module.exports = {
           );
           res.send({ user });
         } else {
-          return res.status(401).json({ message: "This account has been blocked by admin" });
+          return res.status(401).json({ message: "This account has been blocked by admin !!" });
         }
       }
     } catch (error) {
@@ -113,7 +113,7 @@ module.exports = {
         });
         return res.status(200).json({ article, message: "Article Created" });
       } else {
-        return res.status(401).json({ message: "This account has been blocked by admin" });
+        return res.status(401).json({ message: "This account has been blocked by admin !!" });
       }
     } catch (error) {
       console.log(error);
@@ -156,7 +156,7 @@ module.exports = {
         });
         return res.status(200).json({ events, message: "Event Created" });
       } else {
-        return res.status(401).json({ message: "This account has been blocked by admin" });
+        return res.status(401).json({ message: "This account has been blocked by admin !!" });
       }
     } catch (error) {
       console.log(error);

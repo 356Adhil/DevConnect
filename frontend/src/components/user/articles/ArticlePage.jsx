@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { toast } from 'react-toastify';
 // import { Button } from "@material-tailwind/react";
 // import AddArticle from "./AddArticle";
 // import { useNavigate } from "react-router-dom";
@@ -73,7 +74,17 @@ function ArticlePage() {
       window.location.reload();
     } catch (error) {
       console.error(error);
-      swal("Oops!", error.response.data.message, "error");
+      toast.error(error.response.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        })
+      // swal("Oops!", error.response.data.message, "error");
     }
   };
 

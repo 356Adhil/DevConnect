@@ -15,6 +15,8 @@ import ArticleSinglePage from "./pages/user/articles/ArticleSinglePage";
 import EventPage from "./pages/user/events/EventPage";
 import AdminUsers from "./pages/admin/home/AdminUsers";
 import AdminPrivate from './privateRoutes/adminRouter'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -24,6 +26,7 @@ function App() {
   return (
     <div>
       <BrowserRouter>
+      <ToastContainer />
       <Routes>
          <Route path="/admin" exact element={<AdminPrivate> <SignIn /> </AdminPrivate>} /> 
 

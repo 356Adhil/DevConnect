@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setEventData } from '../../../Redux/features/eventSlice'
 import instance from "../../../axios";
+import { toast } from 'react-toastify';
 
 function EventAddModal({ onClose }) {
 
@@ -34,6 +35,16 @@ function EventAddModal({ onClose }) {
       dispatch(setEventData(response.data));
       onClose();
     } catch (error) {
+      toast.error(error.response.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        })
       console.log(error);
     }
   };

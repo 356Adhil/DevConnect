@@ -4,8 +4,6 @@ import instance from "../../../axios";
 
 function UserManage() {
   const [users, setUsers] = useState([]);
-  const [id, setId] = useState("");
-  const [view, setView] = useState(false);
 
   const handleBlock = (id) => {
     instance.get(`/admin/blockuser/${id}`).then(() => {
@@ -18,45 +16,18 @@ function UserManage() {
     });
   };
 
-  const handleView = (id) => {
-    setView(!view);
-    setId(id);
-  };
-
-  // Dummy data for table
-  const dummyUsers = [
-    {
-      id: 1,
-      name: "John Doe",
-      phone: "123456789",
-      bio: "Lorem ipsum dolor sit amet.",
-      isBlock: false,
-      status: "offline",
-    },
-    {
-      id: 2,
-      name: "Jane Doe",
-      phone: "987654321",
-      bio: "Consectetur adipiscing elit.",
-      isBlock: true,
-      status: "online",
-    },
-  ];
-
   useEffect(() => {
     instance.get("/admin/getusers").then((res) => {
       console.log(res.data);
       if (res.data) {
         setUsers(res.data);
       }
-      console.log(id);
     });
   }, []);
 
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        {view && <div>User View {id}</div>}
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -191,12 +162,6 @@ function UserManage() {
                         </svg>
                       </button>
                     )}
-                    {/* <button
-                      onClick={() => handleView(user._id)}
-                      className="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 rounded-md text-sm"
-                    >
-                      View
-                    </button> */}
                   </td>
                 </tr>
               );

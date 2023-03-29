@@ -3,11 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const [showbar, setShowbar] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("admin");
-    navigate('/admin')
+    navigate("/admin");
   };
 
   return (
@@ -31,10 +31,7 @@ function Sidebar() {
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path
-
-                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-                  ></path>
+                  <path d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                 </svg>
               </button>
               <a href="#" className="flex ml-24  md:mr-24">
@@ -81,9 +78,50 @@ function Sidebar() {
                 <span className="ml-3">Dashboard</span>
               </a>
             </li>
+                        
             <li>
               <Link
-                to={"/admin/posts"}
+                to={"/admin-users"}
+                className="flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:dark:text-primary hover:font-semibold hover:bg-secondary"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="flex-shrink-0 w-6 h-6transition duration-75"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
+                </svg>
+                <span className="flex-1 ml-3 whitespace-nowrap">Users</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/admin/events"}
+                className="flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:dark:text-primary hover:font-semibold hover:bg-secondary"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="flex-shrink-0 w-6 h-6 transition duration-75"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"
+                  />
+                </svg>
+
+                <span className="flex-1 ml-3 whitespace-nowrap">Events</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/admin/articles"}
                 className="flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:dark:text-primary hover:font-semibold hover:bg-secondary"
               >
                 <svg
@@ -101,78 +139,30 @@ function Sidebar() {
                   />
                 </svg>
 
-                <span className="flex-1 ml-3 whitespace-nowrap">Posts</span>
+                <span className="flex-1 ml-3 whitespace-nowrap">Articles</span>
               </Link>
             </li>
             <li>
               <Link
-                to={"/admin/plans"}
+                to={"/admin/community"}
                 className="flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:dark:text-primary hover:font-semibold hover:bg-secondary"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="flex-shrink-0 w-6 h-6 transition duration-75"
-
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 640 512"
+                aria-hidden="true"
+                className="flex-shrink-0 w-6 h-6transition duration-75"
+                fill="currentColor">
+                  <path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z" />
                 </svg>
 
-                <span className="flex-1 ml-3 whitespace-nowrap">Plans</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                to={"/admin-users"}
-                className="flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:dark:text-primary hover:font-semibold hover:bg-secondary"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="flex-shrink-0 w-6 h-6transition duration-75"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                  ></path>
-                </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap">Users</span>
-              </Link>
-            </li>
-            <li>
-              <Link to={"/admin/diarymanage"} className="flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:dark:text-primary hover:font-semibold hover:bg-secondary">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="flex-shrink-0 w-6 h-6 transition duration-75"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0120.25 6v12A2.25 2.25 0 0118 20.25H6A2.25 2.25 0 013.75 18V6A2.25 2.25 0 016 3.75h1.5m9 0h-9"
-                    />
-                  </svg>
-
-                  <span className="flex-1 ml-3 whitespace-nowrap">Diaries</span>
+                <span className="flex-1 ml-3 whitespace-nowrap">Community</span>
               </Link>
             </li>
             <li>
               <button
                 onClick={handleLogout}
                 className="flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:dark:text-primary hover:font-semibold hover:bg-secondary"
-                >
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
