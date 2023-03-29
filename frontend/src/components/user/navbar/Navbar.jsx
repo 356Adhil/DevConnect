@@ -7,6 +7,7 @@ import Login from "../login/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUserDetails } from "../../../Redux/features/userSlice";
+import instance from "../../../axios";
 // import { useSelector } from "react-redux";
 
 

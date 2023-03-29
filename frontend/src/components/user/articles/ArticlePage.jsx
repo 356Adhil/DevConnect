@@ -73,7 +73,7 @@ function ArticlePage() {
       window.location.reload();
     } catch (error) {
       console.error(error);
-      swal("Oops!", "Error adding article. Please try again", "error");
+      swal("Oops!", error.response.data.message, "error");
     }
   };
 

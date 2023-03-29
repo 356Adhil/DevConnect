@@ -48,7 +48,7 @@ module.exports = {
           const token = createToken(user._id);
           return res.status(200).json({ email, token, user });
         } else {
-          return res.status(401).json({ message: "This account is blocked" });
+          return res.status(401).json({ message: "This account has been blocked by admin" });
         }
       } else {
         return res.status(401).json({ message: "Invalid login credentials" });
@@ -64,7 +64,11 @@ module.exports = {
       const id = req.id;
       User.findOne({ _id: id }).then((user) => {
         if (user) {
-          res.send({ user });
+          if(user.isBlock == false ){
+            res.send({ user });
+          } else {
+            return res.status(401).json({ message: "This account has been blocked by admin" });
+          }
         }
       });
     } catch (error) {
@@ -80,11 +84,15 @@ module.exports = {
       const id = req.id;
       const user = await User.findOne({ _id: id });
       if (user) {
-        await User.updateOne(
-          { _id: id },
-          { fullName: fullName, email: email, about: about }
-        );
-        res.send({ user });
+        if(user.isBlock == false ){
+          await User.updateOne(
+            { _id: id },
+            { fullName: fullName, email: email, about: about }
+          );
+          res.send({ user });
+        } else {
+          return res.status(401).json({ message: "This account has been blocked by admin" });
+        }
       }
     } catch (error) {
       console.error(error);
@@ -97,12 +105,16 @@ module.exports = {
     try {
       const id = req.id;
       const user = await User.findOne({ _id: id });
-      const article = await Article.create({
-        title: title,
-        content: content,
-        userName: user.fullName,
-      });
-      return res.status(200).json({ article, message: "Article Created" });
+      if(user.isBlock == false ){
+        const article = await Article.create({
+          title: title,
+          content: content,
+          userName: user.fullName,
+        });
+        return res.status(200).json({ article, message: "Article Created" });
+      } else {
+        return res.status(401).json({ message: "This account has been blocked by admin" });
+      }
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });
@@ -134,14 +146,18 @@ module.exports = {
     try {
       const id = req.id;
       const user = await User.findOne({ _id: id });
-      const events = await Events.create({
-        title: data.title,
-        description: data.description,
-        userId: user._id,
-        eventDate: formattedDate,
-        category: data.category,
-      });
-      return res.status(200).json({ events, message: "Event Created" });
+      if(user.isBlock == false ){
+        const events = await Events.create({
+          title: data.title,
+          description: data.description,
+          userId: user._id,
+          eventDate: formattedDate,
+          category: data.category,
+        });
+        return res.status(200).json({ events, message: "Event Created" });
+      } else {
+        return res.status(401).json({ message: "This account has been blocked by admin" });
+      }
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });

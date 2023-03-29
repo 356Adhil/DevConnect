@@ -61,7 +61,7 @@ function Articles() {
       <div className="px-4 py-3 flex-grow">
         <h2 className="text-xl font-medium mb-2">{article.title}</h2>
         <div className="h-20 overflow-hidden">
-        <p className="text-gray-700 text-base mb-4">
+        <div className="text-gray-700 text-base mb-4">
         <div dangerouslySetInnerHTML={{ __html: article.content.slice(0, 140) + '...' }}></div>
 
           {article.content.length > 140 && (
@@ -72,7 +72,7 @@ function Articles() {
               See More
             </button>
           )}
-        </p>
+        </div>
         </div>
       </div>
       <div className="mt-auto px-4 py-3">
