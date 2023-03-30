@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
-const secretKey = "secret"; // set your own secret key here
 require("dotenv").config();
-const adminMail = "admin@gmail.com";
-const adminPass = "110011";
+const jwt = require("jsonwebtoken");
+const secretKey = process.env.JWT_SECRET_KEY;
+const adminMail = process.env.ADMIN_MAIL;
+const adminPass = process.env.ADMIN_PASS;
 const User = require("../../models/userModel");
 const Event = require("../../models/eventsModel");
 

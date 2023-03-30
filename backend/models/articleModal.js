@@ -18,6 +18,9 @@ const articleSchema = new mongoose.Schema({
     coverImg: {
         type: String
     },
+    coverImg: {
+        type: String,
+      },
       createdDate: {
         type: String,
         default: () => new Date().toISOString().substr(0, 10)

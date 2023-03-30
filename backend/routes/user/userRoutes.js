@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { upload } = require('../../config/cloudinaryConfig');
+const upload  = require('../../config/cloudinaryConfig');
 const userController = require('../../controllers/user/userController')
 const { verify } = require("../../middleware/verification");
 
@@ -11,7 +11,7 @@ router.get("/getProfile",verify,userController.getProfile)
 
 router.post('/editprofile',verify,userController.postEditProfile)
 
-router.post('/articles',verify,userController.postArticle)
+router.post('/articles',verify,upload,userController.postArticle)
 
 router.get('/articles',userController.getArticle)    
 

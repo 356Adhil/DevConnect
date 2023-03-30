@@ -1,8 +1,7 @@
-const { response } = require("express");
 const User = require("../../models/userModel");
 const jwt = require("jsonwebtoken");
-const { find } = require("../../models/userModel");
-const secretKey = "secret"; // set your own secret key here
+require("dotenv").config();
+const secretKey = process.env.JWT_SECRET_KEY;
 const Article = require("../../models/articleModal");
 const Events = require("../../models/eventsModel");
 
@@ -102,14 +101,16 @@ module.exports = {
   postArticle: async (req, res) => {
     title = req.body.title;
     content = req.body.content;
-    try {
+    const image = req.file.path
+    try {     
       const id = req.id;
       const user = await User.findOne({ _id: id });
       if(user.isBlock == false ){
         const article = await Article.create({
-          title: title,
+          title: title,   
           content: content,
           userName: user.fullName,
+          coverImg:image
         });
         return res.status(200).json({ article, message: "Article Created" });
       } else {
@@ -135,7 +136,6 @@ module.exports = {
 
   postEvent: async (req, res) => {
     const data = req.body;
-
     const inputDate = data.date;
     const dateObj = new Date(inputDate);
     const day = dateObj.getDate();
