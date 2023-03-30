@@ -18,6 +18,8 @@ import AdminPrivate from './privateRoutes/adminRouter'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminEvents from './pages/admin/events/AdminEvents';
+import EventSinglePage from './pages/user/events/EventSinglePage';
+import CommunityPage from './pages/admin/community/CommunityPage';
 
 
 function App() {
@@ -47,6 +49,10 @@ function App() {
 
         <Route path="/events" exact element={<EventPage />} />
         
+        <Route path="/single-event" exact element={<EventSinglePage />} />
+
+        <Route path="/admin/community" exact element={<CommunityPage />} />
+
       </Routes>
       </BrowserRouter>
     </div>

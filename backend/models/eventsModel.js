@@ -17,11 +17,22 @@ const eventSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  coverImg: {
+    type: String,
+},
   createdDate: {
     type: String,
     default: () => new Date().toISOString().substr(0, 10)
   },
   eventDate: {
+    type: String,
+    required: true
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  eventTime: {
     type: String,
     required: true
   },

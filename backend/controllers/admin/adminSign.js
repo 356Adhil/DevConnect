@@ -5,6 +5,7 @@ const adminMail = process.env.ADMIN_MAIL;
 const adminPass = process.env.ADMIN_PASS;
 const User = require("../../models/userModel");
 const Event = require("../../models/eventsModel");
+const Community = require("../../models/communityModel")
 
 module.exports = {
   adminPostSign: async (req, res) => {
@@ -71,7 +72,7 @@ module.exports = {
       console.log(id);
       let value;
       Event.findById(id).then((data) => {
-        console.log(data)
+        console.log(data);
         if (data.isApproved === true) {
           value = false;
         } else {
@@ -79,7 +80,7 @@ module.exports = {
         }
         Event.findByIdAndUpdate(id, { isApproved: value }).then((event) => {
           if (event) {
-            console.log(event)
+            console.log(event);
             res.send({ succes: true });
           }
         });
@@ -89,4 +90,17 @@ module.exports = {
     }
   },
 
+  postCommunity: async (req, res) => {
+    try {
+      const data = req.body; 
+      console.log("hello hello hello")
+      const communities = await Community.create({
+        title: data.name,
+        description: data.description,
+      });
+      console.log(communities)
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };

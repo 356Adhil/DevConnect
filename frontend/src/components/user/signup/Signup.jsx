@@ -14,7 +14,6 @@ function Signup() {
   
 
   const onSubmit = async (values, actions) => {
-  console.log(values);
     try {
       const response = await instance.post('/signup', values);
       console.log(response);

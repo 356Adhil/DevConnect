@@ -12,4 +12,6 @@ router.get("/admin/getEvents",adminSign.adminGetEvents)
 
 router.get("/admin/approveEvent/:id",adminSign.approveEvent)
 
+router.post("/admin/community", adminSign.postCommunity);
+
 module.exports=router

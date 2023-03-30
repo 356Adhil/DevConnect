@@ -4,50 +4,64 @@ require("dotenv").config();
 const secretKey = process.env.JWT_SECRET_KEY;
 const Article = require("../../models/articleModal");
 const Events = require("../../models/eventsModel");
+const bcrypt = require("bcrypt");
+
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, secretKey, { expiresIn: "1d" });
 };
 
 module.exports = {
+
+
   postSignup: async (req, res) => {
     fullName = req.body.fullName;
     password = req.body.password;
     email = req.body.email;
     phone = req.body.phone;
-
+  
     try {
       const oldUser = await User.findOne({ email: email });
       if (oldUser) {
         return res.status(400).json({ message: "User already exists" });
       } else {
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+  
+        // Create the user with the hashed password
         const user = await User.create({
           fullName: fullName,
-          password: password,
+          password: hashedPassword,
           email: email,
           phone: phone,
         });
-
+  
         return res.status(200).json({ message: "User created successfully" }); // include token in response
       }
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });
     }
-  },
+  }
+  ,
 
   postLogin: async (req, res) => {
     const { email, password } = req.body;
-
+  
     try {
-      const user = await User.findOne({ email, password });
-
+      const user = await User.findOne({ email });
+  
       if (user) {
-        if(user.isBlock == false ){
+        if (user.isBlock) {
+          return res.status(401).json({ message: "This account has been blocked by admin !!" });
+        }
+  
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if (isPasswordMatch) {
           const token = createToken(user._id);
           return res.status(200).json({ email, token, user });
         } else {
-          return res.status(401).json({ message: "This account has been blocked by admin !!" });
+          return res.status(401).json({ message: "Invalid login credentials" });
         }
       } else {
         return res.status(401).json({ message: "Invalid login credentials" });
@@ -142,6 +156,7 @@ module.exports = {
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
+    const image = req.file.path
 
     try {
       const id = req.id;
@@ -152,7 +167,10 @@ module.exports = {
           description: data.description,
           userId: user._id,
           eventDate: formattedDate,
+          eventTime: data.time,
+          location: data.location,
           category: data.category,
+          coverImg: image,
         });
         return res.status(200).json({ events, message: "Event Created" });
       } else {
@@ -171,5 +189,5 @@ module.exports = {
     } catch (error) {
       console.error(error);
     }
-  },  
+  },
 };

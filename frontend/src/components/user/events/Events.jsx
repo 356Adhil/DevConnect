@@ -5,14 +5,22 @@ import EventAddModal from "./EventAddModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setEventData } from "../../../Redux/features/eventSlice";
 import instance from "../../../axios";
+import EventView from "./EventView";
+import { useNavigate } from "react-router-dom";
 
 const Events = () => {
   const [showModal, setShowModal] = useState(false);
+
+  const navigate = useNavigate();
 
   const [events, setEvents] = useState([]);
 
   function handleAddEvent(newEvent) {
     setEvents([...events, newEvent]);
+  }
+
+  function handleClick(event) {
+    navigate("/single-event", { state: { event } });
   }
 
   const dispatch = useDispatch();
@@ -46,16 +54,14 @@ const Events = () => {
           </button>
         )}
       </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mt-11">
   {eventData
     ?.filter((event) => event.isApproved)
     .map((event) => (
-      <div key={event._id} className="bg-white border-b-2 border-x-2 overflow-hidden">
-        <div
-          className="h-48 bg-cover bg-center"
-          style={{ backgroundImage: `url(${cover1})` }}
-        ></div>
+      <div key={event._id} onClick={() => handleClick(event)} className="bg-white border-b-2 border-x-2 overflow-hidden hover:cursor-pointer">
+        <div className="h-48">
+          <img src={event.coverImg} alt={event.title} className="object-cover w-full h-full" />
+        </div>
         <div className="p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold">{event.title}</span>
@@ -73,9 +79,6 @@ const Events = () => {
   )}
   {(!eventData || eventData.length === 0) && <p>No events to display</p>}
 </div>
-
-
-
       {showModal && <EventAddModal onClose={() => setShowModal(false)} />}
     </div>
   );

@@ -1,17 +1,17 @@
-import axios from "../../../axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setEventData } from '../../../Redux/features/eventSlice'
+import { setEventData } from "../../../Redux/features/eventSlice";
 import instance from "../../../axios";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 function EventAddModal({ onClose }) {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [eventData, setEventDatas] = useState({
     title: "",
     category: "",
     date: "",
+    time: "",
+    location: "",
     description: "",
   });
 
@@ -24,11 +24,33 @@ function EventAddModal({ onClose }) {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const res = await instance.post("/events", eventData, {
+
+      const formData = new FormData();
+      formData.append("title", eventData.title);
+      formData.append("category", eventData.category);
+      formData.append("date", eventData.date);
+      formData.append("time", eventData.time);
+      formData.append("location", eventData.location);
+      formData.append("description", eventData.description);
+      formData.append("image", eventData.image);
+
+      const res = await instance.post("/events", formData, {
         headers: {
           Authorization: user.token,
+          "Content-Type": "multipart/form-data",
         },
       });
+      toast.warning("Event added successfully! but admin has approve it!!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
       const response = await instance.get("/events");
       console.log(response.data, "ggggggg");
       dispatch(setEventData(response.data));
@@ -43,17 +65,17 @@ function EventAddModal({ onClose }) {
         draggable: true,
         progress: undefined,
         theme: "colored",
-        })
+      });
       console.log(error);
     }
   };
-  
+
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
       <div className="bg-white rounded-lg overflow-hidden sm:w-1/2">
         <div className="p-4">
           <h2 className="text-2xl font-bold mb-4">Add Event</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="mb-4">
               <label
                 className="block text-gray-700 font-bold mb-2"
@@ -71,6 +93,22 @@ function EventAddModal({ onClose }) {
                 required
               />
             </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 font-bold mb-2">
+                Cover Image
+              </label>
+              <input
+                type="file"
+                accept=".jpg, .jpeg, .png"
+                onChange={(e) =>
+                  setEventDatas((prevEventData) => ({
+                    ...prevEventData,
+                    image: e.target.files[0],
+                  }))
+                }
+              />
+            </div>
+
             <div className="mb-4">
               <label
                 className="block text-gray-700 font-bold mb-2"
@@ -101,6 +139,40 @@ function EventAddModal({ onClose }) {
                 type="date"
                 name="date"
                 value={eventData?.date}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 font-bold mb-2"
+                htmlFor="time"
+              >
+                Time
+              </label>
+              <input
+                className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="time"
+                type="time"
+                name="time"
+                value={eventData?.time}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 font-bold mb-2"
+                htmlFor="location"
+              >
+                Location
+              </label>
+              <input
+                className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="location"
+                type="location"
+                name="location"
+                value={eventData?.location}
                 onChange={handleInputChange}
                 required
               />
