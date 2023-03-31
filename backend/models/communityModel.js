@@ -9,6 +9,10 @@ const communitySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isShow: {
+    type: Boolean,
+    default: true
+  }
 });
 
 const Community = mongoose.model("Community", communitySchema);

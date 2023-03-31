@@ -93,14 +93,39 @@ module.exports = {
   postCommunity: async (req, res) => {
     try {
       const data = req.body; 
-      console.log("hello hello hello")
       const communities = await Community.create({
         title: data.name,
         description: data.description,
       });
-      console.log(communities)
+      res.send(communities)
     } catch (error) {
       console.error(error);
+    }
+  },
+
+  getCommunity: async (req, res) => {
+    const community = await Community.find();
+    res.send(community);
+  },
+
+  showCommunity: (req, res) => {
+    try {
+      const id = req.params.id;
+      let value;
+      Community.findById(id).then((data) => {
+        if (data.isShow === true) {
+          value = false;
+        } else {
+          value = true;
+        }
+        Community.findByIdAndUpdate(id, { isShow: value }).then((community) => {
+          if (community) {
+            res.send({ succes: true });
+          }
+        });
+      });
+    } catch (error) {
+      console.error();
     }
   },
 };

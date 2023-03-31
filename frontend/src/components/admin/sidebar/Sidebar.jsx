@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../../assets/devconnect.svg";
 
 function Sidebar() {
   const [showbar, setShowbar] = useState(false);
@@ -35,15 +36,10 @@ function Sidebar() {
                 </svg>
               </button>
               <a href="#" className="flex ml-24  md:mr-24">
-                <div className="bg-primary rounded-md">
-                  <img
-                    src="/images/nav-logo.png"
-                    className="w-14 "
-                    alt="Logo"
-                  />
-                </div>
-                <span className="self-center ml-3  text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
+                <span className="self-center ml-3  text-xl font-serif font-bold sm:text-2xl whitespace-nowrap dark:text-secondary">
+                  <u>
                   DevConnect
+                  </u>
                 </span>
               </a>
             </div>
@@ -119,7 +115,7 @@ function Sidebar() {
                 <span className="flex-1 ml-3 whitespace-nowrap">Events</span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 to={"/admin/articles"}
                 className="flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:dark:text-primary hover:font-semibold hover:bg-secondary"
@@ -141,7 +137,7 @@ function Sidebar() {
 
                 <span className="flex-1 ml-3 whitespace-nowrap">Articles</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 to={"/admin/community"}
