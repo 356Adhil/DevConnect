@@ -4,7 +4,7 @@ import { setEventData } from "../../../Redux/features/eventSlice";
 import instance from "../../../axios";
 import { toast } from "react-toastify";
 
-function EventAddModal({ onClose }) {
+function EventAddModal({ onClose, handleAddEvent }) {
   const dispatch = useDispatch();
   const [eventData, setEventDatas] = useState({
     title: "",
@@ -40,23 +40,10 @@ function EventAddModal({ onClose }) {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.warning("Event added successfully! but admin has approve it!!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-
-      const response = await instance.get("/events");
-      console.log(response.data, "ggggggg");
-      dispatch(setEventData(response.data));
+      // console.log(res.data.events)
+      handleAddEvent(res.data.events)
       onClose();
-    } catch (error) {
-      toast.error(error.response.data.message, {
+      toast.warning("Event Added, Awaiting Approval From Admin !", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -66,6 +53,7 @@ function EventAddModal({ onClose }) {
         progress: undefined,
         theme: "colored",
       });
+    } catch (error) {
       console.log(error);
     }
   };

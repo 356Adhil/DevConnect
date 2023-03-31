@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AdminEvents from './pages/admin/events/AdminEvents';
 import EventSinglePage from './pages/user/events/EventSinglePage';
 import CommunityPage from './pages/admin/community/CommunityPage';
+import AddArticlePage from './pages/user/articles/AddArticlePage';
 
 
 function App() {
@@ -31,17 +32,19 @@ function App() {
       <BrowserRouter>
       <ToastContainer />
       <Routes>
-         <Route path="/admin" exact element={<AdminPrivate> <SignIn /> </AdminPrivate>} /> 
+        <Route path="/admin" exact element={<AdminPrivate> <SignIn /> </AdminPrivate>} /> 
 
-         <Route path="/admin-users" exact element={<AdminPrivate> <AdminUsers /> </AdminPrivate>} /> 
+        <Route path="/admin-users" exact element={<AdminPrivate> <AdminUsers /> </AdminPrivate>} /> 
 
-         <Route path="/admin/events" exact element={ <AdminEvents/> } /> 
+        <Route path="/admin/events" exact element={ <AdminEvents/> } /> 
 
         <Route path="/" exact element={<Home />} />
 
         <Route path="/articles" exact element={<ArticlePages />} />
         
         <Route path="/single-article" exact element={<ArticleSinglePage />} />
+
+        <Route path="/addArticle" exact element={<AddArticlePage />} />
 
         <Route path="/profile" exact element={<Private> <ProfilePage /> </Private>} />
 

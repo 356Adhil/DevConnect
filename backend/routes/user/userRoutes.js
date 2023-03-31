@@ -19,4 +19,6 @@ router.post("/events", verify, upload, userController.postEvent);
 
 router.get("/events", userController.getEvent);
 
+router.get("/userEvents/:id", userController.getUserEvents);
+
 module.exports = { router };

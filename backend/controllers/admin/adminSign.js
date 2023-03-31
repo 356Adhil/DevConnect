@@ -66,13 +66,11 @@ module.exports = {
     }
   },
 
-  approveEvent: (req, res) => {
+  approveEvent: async (req, res) => {
     try {
       const id = req.params.id;
-      console.log(id);
       let value;
       Event.findById(id).then((data) => {
-        console.log(data);
         if (data.isApproved === true) {
           value = false;
         } else {
@@ -80,7 +78,6 @@ module.exports = {
         }
         Event.findByIdAndUpdate(id, { isApproved: value }).then((event) => {
           if (event) {
-            console.log(event);
             res.send({ succes: true });
           }
         });

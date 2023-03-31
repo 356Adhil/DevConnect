@@ -11,11 +11,9 @@ const communitySchema = new mongoose.Schema({
   },
   isShow: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 });
 
 const Community = mongoose.model("Community", communitySchema);
 module.exports = Community;
-
-

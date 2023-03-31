@@ -5,21 +5,19 @@ const secretKey = process.env.JWT_SECRET_KEY;
 const Article = require("../../models/articleModal");
 const Events = require("../../models/eventsModel");
 const bcrypt = require("bcrypt");
-
+const { default: mongoose } = require("mongoose");
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, secretKey, { expiresIn: "1d" });
 };
 
 module.exports = {
-
-
   postSignup: async (req, res) => {
     fullName = req.body.fullName;
     password = req.body.password;
     email = req.body.email;
     phone = req.body.phone;
-  
+
     try {
       const oldUser = await User.findOne({ email: email });
       if (oldUser) {
@@ -27,7 +25,7 @@ module.exports = {
       } else {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-  
+
         // Create the user with the hashed password
         const user = await User.create({
           fullName: fullName,
@@ -35,27 +33,27 @@ module.exports = {
           email: email,
           phone: phone,
         });
-  
+
         return res.status(200).json({ message: "User created successfully" }); // include token in response
       }
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });
     }
-  }
-  ,
-
+  },
   postLogin: async (req, res) => {
     const { email, password } = req.body;
-  
+
     try {
       const user = await User.findOne({ email });
-  
+
       if (user) {
         if (user.isBlock) {
-          return res.status(401).json({ message: "This account has been blocked by admin !!" });
+          return res
+            .status(401)
+            .json({ message: "This account has been blocked by admin !!" });
         }
-  
+
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (isPasswordMatch) {
           const token = createToken(user._id);
@@ -77,10 +75,12 @@ module.exports = {
       const id = req.id;
       User.findOne({ _id: id }).then((user) => {
         if (user) {
-          if(user.isBlock == false ){
+          if (user.isBlock == false) {
             res.send({ user });
           } else {
-            return res.status(401).json({ message: "This account has been blocked by admin !!" });
+            return res
+              .status(401)
+              .json({ message: "This account has been blocked by admin !!" });
           }
         }
       });
@@ -97,14 +97,16 @@ module.exports = {
       const id = req.id;
       const user = await User.findOne({ _id: id });
       if (user) {
-        if(user.isBlock == false ){
+        if (user.isBlock == false) {
           await User.updateOne(
             { _id: id },
             { fullName: fullName, email: email, about: about }
           );
           res.send({ user });
         } else {
-          return res.status(401).json({ message: "This account has been blocked by admin !!" });
+          return res
+            .status(401)
+            .json({ message: "This account has been blocked by admin !!" });
         }
       }
     } catch (error) {
@@ -115,20 +117,22 @@ module.exports = {
   postArticle: async (req, res) => {
     title = req.body.title;
     content = req.body.content;
-    const image = req.file.path
-    try {     
+    const image = req.file.path;
+    try {
       const id = req.id;
       const user = await User.findOne({ _id: id });
-      if(user.isBlock == false ){
+      if (user.isBlock == false) {
         const article = await Article.create({
-          title: title,   
+          title: title,
           content: content,
           userName: user.fullName,
-          coverImg:image
+          coverImg: image,
         });
         return res.status(200).json({ article, message: "Article Created" });
       } else {
-        return res.status(401).json({ message: "This account has been blocked by admin !!" });
+        return res
+          .status(401)
+          .json({ message: "This account has been blocked by admin !!" });
       }
     } catch (error) {
       console.log(error);
@@ -156,12 +160,12 @@ module.exports = {
     const month = dateObj.getMonth() + 1;
     const year = dateObj.getFullYear();
     const formattedDate = `${day}/${month}/${year}`;
-    const image = req.file.path
+    const image = req.file.path;
 
     try {
       const id = req.id;
       const user = await User.findOne({ _id: id });
-      if(user.isBlock == false ){
+      if (user.isBlock == false) {
         const events = await Events.create({
           title: data.title,
           description: data.description,
@@ -174,7 +178,9 @@ module.exports = {
         });
         return res.status(200).json({ events, message: "Event Created" });
       } else {
-        return res.status(401).json({ message: "This account has been blocked by admin !!" });
+        return res
+          .status(401)
+          .json({ message: "This account has been blocked by admin !!" });
       }
     } catch (error) {
       console.log(error);
@@ -185,9 +191,30 @@ module.exports = {
   getEvent: async (req, res) => {
     try {
       const events = await Events.find();
-        res.json( events ).status(200)
+      res.json(events).status(200);
     } catch (error) {
       console.error(error);
+    }
+  },
+
+  getUserEvents: async (req, res) => {
+    try {
+      const userId = req.params.id;
+
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).send("Invalid user ID");
+      }
+
+      const events = await Events.find({ userId });
+
+      if (!events) {
+        return res.status(404).send("No events found for user");
+      }
+
+      res.send(events);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Internal server error");
     }
   },
 };
