@@ -1,4 +1,3 @@
-import axios from "../../../axios";
 import React, { useEffect, useState } from "react";
 import profile from "../../../assets/Profile.jpg";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +22,8 @@ export default function Profile() {
           },
         })
         .then((res) => {
-          dispatch(setUserDetails(res.data.user))
+          console.log(res.data)
+          dispatch(setUserDetails(res.data))
         });
     },[]);
     
@@ -118,21 +118,21 @@ export default function Profile() {
                 </div>
                 <div className="text-center mt-12">
                   <h3 className="text-4xl font-semibold leading-normal text-gray-800 mb-2 uppercase">
-                    {userDetails?.fullName}
+                    {userDetails?.user?.fullName}
                   </h3>
                   <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
                     <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>{" "}
                     {'user.user.place'}
                   </div>
                   <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
-                    {userDetails?.email}
+                    {userDetails?.user?.email}
                   </div>
                 </div>
                 <div className="mt-10 py-10 border-t border-gray-300 text-center">
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-9/12 px-4">
                       <p className="mb-4 text-lg leading-relaxed text-gray-800">
-                      {userDetails?.about}
+                      {userDetails?.user?.about}
                       </p>
                     </div>
                   </div>

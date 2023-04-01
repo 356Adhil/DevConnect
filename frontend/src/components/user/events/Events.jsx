@@ -40,8 +40,8 @@ const Events = () => {
     instance
       .get("/events")
       .then((response) => {
-        console.log(response.data.events);
-        setEvents(response.data.events);
+        console.log(response.data);
+        setEvents(response.data);
         dispatch(setEventData(response.data));
         console.log(eventData);
       })
@@ -49,6 +49,7 @@ const Events = () => {
         console.log(err);
       });
     if (userDetails) {
+      console.log(userDetails)
       getUserEvents(userDetails.user._id); // Call getUserEvents on page load
     }
   }, []);
@@ -116,9 +117,11 @@ const Events = () => {
 
         {userDetails && (
           <>
-            <h1 className="text-3xl font-bold mb-4 mt-12">
-              <u>Pending your Events</u>
-            </h1>
+            {userEvents.some((event) => !event.isApproved) && (
+              <h1 className="text-3xl font-bold mb-4 mt-12">
+                <u>Pending your Events</u>
+              </h1>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mt-11">
               {userEvents
                 ?.filter((event) => event.isApproved === false)
