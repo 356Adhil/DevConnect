@@ -1,16 +1,20 @@
-import React from 'react'
-import SingleArticle from '../../../components/user/articles/SingleArticle'
-import Navbar from '../../../components/user/navbar/Navbar'
+import React from "react";
+import SingleArticle from "../../../components/user/articles/SingleArticle";
+import Navbar from "../../../components/user/navbar/Navbar";
+import Footer from "../../../components/user/footer/Footer";
 
 function ArticleSinglePage() {
   return (
-    <div>
-        <div className='mt-20 p-5'>
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-grow mt-24 mb-24">
         <SingleArticle />
-        </div>
+      </div>
       <Navbar />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
-  )
+  );
 }
 
-export default ArticleSinglePage
+export default ArticleSinglePage;

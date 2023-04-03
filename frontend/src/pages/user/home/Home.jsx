@@ -3,7 +3,7 @@ import instance from "../../../axios";
 import Articles from "../../../components/user/articles/Articles";
 import Cover from "../../../components/user/cover/Cover";
 import Navbar from "../../../components/user/navbar/Navbar";
-
+import Footer from "../../../components/user/footer/Footer";
 
 function Home() {
   // const user = JSON.parse(localStorage.getItem("user"))
@@ -22,10 +22,15 @@ function Home() {
   // },[]);
 
   return (
-    <div>
-      <Cover />
-      <Articles />
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-grow mt-10 mb-24">
+        <Cover />
+        <Articles />
+      </div>
       <Navbar />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

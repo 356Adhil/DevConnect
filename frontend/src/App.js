@@ -21,6 +21,7 @@ import AdminEvents from './pages/admin/events/AdminEvents';
 import EventSinglePage from './pages/user/events/EventSinglePage';
 import CommunityPage from './pages/admin/community/CommunityPage';
 import AddArticlePage from './pages/user/articles/AddArticlePage';
+import UserCommunityPage from './pages/user/community/CommunityPage';
 
 
 function App() {
@@ -55,6 +56,8 @@ function App() {
         <Route path="/single-event" exact element={<EventSinglePage />} />
 
         <Route path="/admin/community" exact element={<CommunityPage />} />
+
+        <Route path="/community" exact element={<UserCommunityPage />} />
 
       </Routes>
       </BrowserRouter>

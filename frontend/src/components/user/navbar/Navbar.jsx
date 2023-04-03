@@ -101,7 +101,7 @@ function Navbar() {
               <li onClick={()=>{navigate('/')}} className="md:hover:text-secondary-200 py-2 cursor-pointer">
                 <span>Home</span>
               </li>
-              <li className="hover:text-secondary-200 py-2 cursor-pointer">
+              <li onClick={()=>{navigate('/community')}} className="hover:text-secondary-200 py-2 cursor-pointer">
                 <span>Community</span>
               </li>
               <li onClick={()=>{navigate('/events')}} className="hover:text-secondary-200 py-2 cursor-pointer">

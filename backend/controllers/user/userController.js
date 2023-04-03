@@ -4,6 +4,7 @@ require("dotenv").config();
 const secretKey = process.env.JWT_SECRET_KEY;
 const Article = require("../../models/articleModal");
 const Events = require("../../models/eventsModel");
+const Community = require("../../models/communityModel")
 const bcrypt = require("bcrypt");
 const { default: mongoose } = require("mongoose");
 
@@ -225,5 +226,15 @@ module.exports = {
       res.status(500).send("Internal server error");
     }
   },
+
+  getCommunity: async (req, res) => {
+    try {
+      const community = await Community.find({ isShow: true });
+      res.json(community).status(200);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Internal server error");
+    }
+  }
   
 };
