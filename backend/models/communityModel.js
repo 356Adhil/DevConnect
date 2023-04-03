@@ -13,6 +13,13 @@ const communitySchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  members: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+      },
+    },
+  ],
 });
 
 const Community = mongoose.model("Community", communitySchema);
