@@ -87,7 +87,7 @@ function EventManage() {
                   </th>
                   <td className="px-6 py-4 text-gray-300 font-semibold">{event.title}</td>
                   <td className="px-6 py-4">{event.category}</td>
-                  <td className="px-6 py-4">{event.eventDate}</td>
+                  <td className="px-6 py-4">{new Date(event.eventDate).toLocaleDateString()}</td>
                   <td className="px-6 py-4">
                     {event.isApproved == false ? (
                       <div className="flex items-center">

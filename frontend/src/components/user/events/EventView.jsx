@@ -32,7 +32,7 @@ const EventView = () => {
           <h1 className="text-4xl font-bold mb-4">{event.title}</h1>
           <div className="flex items-center text-gray-500 mb-4">
             <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
-            <p className="text-lg">{event.eventDate}</p>
+            <p className="text-lg">{new Date(event.eventDate).toLocaleDateString()}</p>
             <FontAwesomeIcon icon={faClock} className="ml-8 mr-2" />
             <p className="text-lg">{event.eventTime}</p>
             <FontAwesomeIcon icon={faUserFriends} className="ml-8 mr-2" />

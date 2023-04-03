@@ -156,27 +156,32 @@ module.exports = {
     const data = req.body;
     const inputDate = data.date;
     const dateObj = new Date(inputDate);
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1;
-    const year = dateObj.getFullYear();
-    const formattedDate = `${day}/${month}/${year}`;
     const image = req.file.path;
 
     try {
       const id = req.id;
       const user = await User.findOne({ _id: id });
       if (user.isBlock == false) {
+        const currentDate = new Date();
+        if (dateObj < currentDate) {
+          return res.status(400).json({ message: "Evant cannot be added ! Event date is in the past !" });
+        }
         const events = await Events.create({
           title: data.title,
           description: data.description,
           userId: user._id,
-          eventDate: formattedDate,
+          eventDate: dateObj,
           eventTime: data.time,
           location: data.location,
           category: data.category,
           coverImg: image,
         });
-        return res.status(200).json({ events, message: "Event Created" });
+        return res
+          .status(200)
+          .json({
+            events,
+            message: "Event Added, Awaiting Approval From Admin !",
+          });
       } else {
         return res
           .status(401)
@@ -190,7 +195,11 @@ module.exports = {
 
   getEvent: async (req, res) => {
     try {
-      const events = await Events.find();
+      const currentDate = new Date();
+      const oldEvents = await Events.find({ eventDate: { $gt: currentDate } });
+      console.log("oldEvents:", oldEvents);
+      const events = await Events.find({ eventDate: { $lte: currentDate } });
+      console.log("events:", events);
       res.json(events).status(200);
     } catch (error) {
       console.error(error);
@@ -200,21 +209,22 @@ module.exports = {
   getUserEvents: async (req, res) => {
     try {
       const userId = req.params.id;
-
+  
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).send("Invalid user ID");
       }
-
-      const events = await Events.find({ userId });
-
-      if (!events) {
-        return res.status(404).send("No events found for user");
+  
+      const events = await Events.find({ userId, eventDate: { $lte: new Date() } });
+  
+      if (!events || events.length === 0) {
+        return res.status(404).send("No upcoming events found for user");
       }
-
+      
       res.send(events);
     } catch (error) {
       console.log(error);
       res.status(500).send("Internal server error");
     }
   },
+  
 };

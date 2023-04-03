@@ -40,10 +40,10 @@ function EventAddModal({ onClose, handleAddEvent }) {
           "Content-Type": "multipart/form-data",
         },
       });
-      // console.log(res.data.events)
+      console.log(res)
       handleAddEvent(res.data.events)
       onClose();
-      toast.warning("Event Added, Awaiting Approval From Admin !", {
+      toast.warning(res.data.message, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -54,7 +54,18 @@ function EventAddModal({ onClose, handleAddEvent }) {
         theme: "colored",
       });
     } catch (error) {
-      console.log(error);
+      onClose();
+      toast.error(error.response.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      console.log(error.response.data.message);
     }
   };
 

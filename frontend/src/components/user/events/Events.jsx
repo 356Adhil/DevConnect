@@ -49,7 +49,7 @@ const Events = () => {
         console.log(err);
       });
     if (userDetails) {
-      console.log(userDetails)
+      console.log(userDetails);
       getUserEvents(userDetails.user._id); // Call getUserEvents on page load
     }
   }, []);
@@ -92,19 +92,12 @@ const Events = () => {
                     </span>
                   </div>
                   <p className="text-gray-600 text-sm mb-2">
-                    {event.eventDate}
+                  {new Date(event.eventDate).toLocaleDateString()}
                   </p>
                   <p className="text-gray-800">{event.description}</p>
                 </div>
               </div>
             ))}
-          {eventData &&
-            eventData.filter((event) => event.isApproved).length === 0 && (
-              <p>No events to display</p>
-            )}
-          {(!eventData || eventData.length === 0) && (
-            <p>No events to display</p>
-          )}
         </div>
         {showModal && (
           <EventAddModal
@@ -147,7 +140,7 @@ const Events = () => {
                       </div>
                       <div className="flex items-center justify-between mb-2">
                         <p className="text-gray-600 text-sm">
-                          {event.eventDate}
+                          {new Date(event.eventDate).toLocaleDateString()}
                         </p>
                         <span className="text-gray-800 text-sm bg-yellow-400 rounded-md py-1 px-2">
                           {event.isApproved ? "" : "Pending"}
@@ -157,14 +150,6 @@ const Events = () => {
                     </div>
                   </div>
                 ))}
-
-              {eventData &&
-                eventData.filter((event) => event.isApproved).length === 0 && (
-                  <p>No events to display</p>
-                )}
-              {(!eventData || eventData.length === 0) && (
-                <p>No events to display</p>
-              )}
             </div>
           </>
         )}
