@@ -40,6 +40,7 @@ const EventView = () => {
             <FontAwesomeIcon icon={faMapMarkerAlt} className="ml-8 mr-2" />
             <p className="text-lg">{event.location}</p>
           </div>
+          <div className="text-lg text-gray-700 mb-4">{event.eventSeats} Seats</div>
           <div className="text-lg text-gray-700 mb-4">{event.description}</div>
           <div className="text-gray-500 mb-4">
             <p className="text-lg font-medium">Category: {event.category}</p>

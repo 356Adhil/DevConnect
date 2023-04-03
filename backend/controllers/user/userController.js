@@ -173,6 +173,7 @@ module.exports = {
           eventDate: dateObj,
           eventTime: data.time,
           location: data.location,
+          eventSeats: data.seats,
           category: data.category,
           coverImg: image,
         });
@@ -192,20 +193,18 @@ module.exports = {
       return res.status(500).json({ message: "Internal server error" });
     }
   },
-
   getEvent: async (req, res) => {
     try {
       const currentDate = new Date();
-      const oldEvents = await Events.find({ eventDate: { $gt: currentDate } });
-      console.log("oldEvents:", oldEvents);
-      const events = await Events.find({ eventDate: { $lte: currentDate } });
+      const events = await Events.find({ eventDate: { $gte: currentDate } });
       console.log("events:", events);
       res.json(events).status(200);
     } catch (error) {
       console.error(error);
     }
   },
-
+  
+  
   getUserEvents: async (req, res) => {
     try {
       const userId = req.params.id;
@@ -214,7 +213,7 @@ module.exports = {
         return res.status(400).send("Invalid user ID");
       }
   
-      const events = await Events.find({ userId, eventDate: { $lte: new Date() } });
+      const events = await Events.find({ userId, eventDate: { $gte: new Date() } });
   
       if (!events || events.length === 0) {
         return res.status(404).send("No upcoming events found for user");

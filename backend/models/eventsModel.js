@@ -28,6 +28,10 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  eventSeats: {
+    type: Number,
+    required: true,
+  },
   location: {
     type: String,
     required: true,

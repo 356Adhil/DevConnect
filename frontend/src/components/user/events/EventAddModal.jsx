@@ -10,6 +10,7 @@ function EventAddModal({ onClose, handleAddEvent }) {
     title: "",
     category: "",
     date: "",
+    seats: "",
     time: "",
     location: "",
     description: "",
@@ -31,6 +32,7 @@ function EventAddModal({ onClose, handleAddEvent }) {
       formData.append("date", eventData.date);
       formData.append("time", eventData.time);
       formData.append("location", eventData.location);
+      formData.append("seats", eventData.seats);
       formData.append("description", eventData.description);
       formData.append("image", eventData.image);
 
@@ -121,6 +123,23 @@ function EventAddModal({ onClose, handleAddEvent }) {
                 type="text"
                 name="category"
                 value={eventData?.category}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 font-bold mb-2"
+                htmlFor="Seats"
+              >
+                No.Of Seats
+              </label>
+              <input
+                className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="seats"
+                type="number"
+                name="seats"
+                value={eventData?.seats}
                 onChange={handleInputChange}
                 required
               />
