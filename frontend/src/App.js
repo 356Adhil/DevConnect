@@ -23,7 +23,6 @@ import CommunityPage from './pages/admin/community/CommunityPage';
 import AddArticlePage from './pages/user/articles/AddArticlePage';
 import UserCommunityPage from './pages/user/community/CommunityPage';
 
-
 function App() {
   // const user = useSelector((state) => state.user);
   // const admin = useSelector((state) => state.admin);
@@ -58,7 +57,7 @@ function App() {
         <Route path="/admin/community" exact element={<CommunityPage />} />
 
         <Route path="/community" exact element={<UserCommunityPage />} />
-
+        
       </Routes>
       </BrowserRouter>
     </div>

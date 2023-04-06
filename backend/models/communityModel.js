@@ -15,9 +15,7 @@ const communitySchema = new mongoose.Schema({
   },
   members: [
     {
-      userId: {
-        type: mongoose.Schema.Types.ObjectId,
-      },
+      type: mongoose.Schema.Types.ObjectId,
     },
   ],
 });

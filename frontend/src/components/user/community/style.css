@@ -1,0 +1,21 @@
+.sender {
+    align-self: flex-end;
+    background-color: #007aff;
+    border-radius: 10px;
+    color: white;
+    padding: 8px;
+    margin: 4px;
+    max-width: 70%;
+    text-align: right;
+  }
+  
+  .receiver {
+    align-self: flex-start;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    color: black;
+    padding: 8px;
+    margin: 4px;
+    max-width: 70%;
+    text-align: left;
+  }

@@ -14,6 +14,12 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  communities : [
+    {
+        type: mongoose.Schema.Types.ObjectId,
+    }
+  ],
+
   password: {
     type: String,
     required: true,

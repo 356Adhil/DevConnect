@@ -112,7 +112,7 @@ const Events = () => {
           <>
             {userEvents.some((event) => !event.isApproved) && (
               <h1 className="text-3xl font-bold mb-4 mt-12">
-                <u>Pending your Events</u>
+                <u>your Events</u>
               </h1>
             )}
             <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mt-11">

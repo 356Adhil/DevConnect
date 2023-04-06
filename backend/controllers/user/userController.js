@@ -4,7 +4,7 @@ require("dotenv").config();
 const secretKey = process.env.JWT_SECRET_KEY;
 const Article = require("../../models/articleModal");
 const Events = require("../../models/eventsModel");
-const Community = require("../../models/communityModel")
+const Community = require("../../models/communityModel");
 const bcrypt = require("bcrypt");
 const { default: mongoose } = require("mongoose");
 
@@ -165,7 +165,11 @@ module.exports = {
       if (user.isBlock == false) {
         const currentDate = new Date();
         if (dateObj < currentDate) {
-          return res.status(400).json({ message: "Evant cannot be added ! Event date is in the past !" });
+          return res
+            .status(400)
+            .json({
+              message: "Evant cannot be added ! Event date is in the past !",
+            });
         }
         const events = await Events.create({
           title: data.title,
@@ -178,12 +182,10 @@ module.exports = {
           category: data.category,
           coverImg: image,
         });
-        return res
-          .status(200)
-          .json({
-            events,
-            message: "Event Added, Awaiting Approval From Admin !",
-          });
+        return res.status(200).json({
+          events,
+          message: "Event Added, Awaiting Approval From Admin !",
+        });
       } else {
         return res
           .status(401)
@@ -204,22 +206,24 @@ module.exports = {
       console.error(error);
     }
   },
-  
-  
+
   getUserEvents: async (req, res) => {
     try {
       const userId = req.params.id;
-  
+
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).send("Invalid user ID");
       }
-  
-      const events = await Events.find({ userId, eventDate: { $gte: new Date() } });
-  
+
+      const events = await Events.find({
+        userId,
+        eventDate: { $lte: new Date() },
+      });
+
       if (!events || events.length === 0) {
         return res.status(404).send("No upcoming events found for user");
       }
-      
+
       res.send(events);
     } catch (error) {
       console.log(error);
@@ -235,6 +239,35 @@ module.exports = {
       console.log(error);
       res.status(500).send("Internal server error");
     }
-  }
-  
+  },
+
+  joinCommunity: async (req, res) => {
+    try {
+      const communityId = req.params.id;
+      const userId = req.id;
+      
+      
+      // check if the user is already a member of the community
+      const community = await Community.findById(communityId);
+      if (community.members.includes(userId)) {
+        const userData = await User.findOne({ _id: userId }).select("fullName");
+        return res.json({userData,community, message: `User already in ${community.title} community` });
+      }
+
+      // add the user to the community's members array
+      community.members.push(userId);
+      await community.save();
+
+      // add the community to the user's communities array
+      const user = await User.findById(userId);
+      user.communities.push(communityId);
+      await user.save();
+      
+      res.status(200).json({ message: `User added to ${community.title} community` });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
 };

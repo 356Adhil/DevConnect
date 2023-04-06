@@ -1,48 +1,129 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@material-tailwind/react";
 import instance from "../../../axios";
+import { toast } from "react-toastify";
+import io from "socket.io-client";
+import { useNavigate } from "react-router-dom";
+import CommunityChat from "./CommunityChat";
 
+const socket = io.connect("http://localhost:4000");
 
 function Community() {
+  const navigate = useNavigate();
+  const [community, setCommunity] = useState([]);
+  const [joinedCommunityIds, setJoinedCommunityIds] = useState([]);
 
-    const [community, setCommunity] = useState([])
+  const [username, setUsername] = useState("");
+  const [room, setRoom] = useState("");
+  const [communityName, setCommunityName] = useState("");
+  const [communityMembers, setCommunityMembers] = useState([]);
 
-    useEffect(() => {
-        instance
-          .get("/community")
-          .then((response) => {
-            console.log(response.data);
-            setCommunity(response.data)
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }, []);
+  const [showChat, setShowChat] = useState(false);
 
-    return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mx-5">
-          {community.map((community) => (
-            <div
-              key={community._id}
-              className="p-4 border rounded-lg shadow-lg hover:shadow-xl transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105"
-            >
-              <h3 className="text-base sm:text-lg lg:text-xl font-medium mb-2">
-                {community.name}
-              </h3>
-              <p className="text-sm sm:text-base lg:text-lg text-gray-600 mb-4">
-                {community.description}
-              </p>
-              <Button
-                color="blue"
-                ripple="light"
-                className="text-white text-sm sm:text-base lg:text-md font-bold py-2 px-4"
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    instance
+      .get("/community")
+      .then((response) => {
+        console.log(response.data);
+        setCommunity(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const joinCommunity = (id) => {
+    instance
+      .post(
+        `/joinCommunity/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        setJoinedCommunityIds([...joinedCommunityIds, id]);
+        console.log(res.data.userData);
+        const userID = res.data.userData._id;
+        const roomID = id;
+        setRoom(id);
+        setUsername(res.data.userData.fullName);
+        console.log(res.data.community);
+        setCommunityName(res.data.community.title);
+        setCommunityMembers(res.data.community.members)
+
+        if (userID !== "" && roomID !== "") {
+          socket.emit("join_room", id);
+        }
+
+        setShowChat(true)
+
+        toast.success(res.data.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Error joining community");
+      });
+  };
+  return (
+    <>
+        {!showChat ? (
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
+            {community.map((community) => (
+              <div
+                key={community._id}
+                className="p-6 border-2  bg-slate-300 bg-opacity-20 border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105 flex flex-col justify-between"
               >
-                Join
-              </Button>
-            </div>
-          ))}
-        </div>
-      );
+                <div>
+                  <h3 className="text-lg font-semibold mb-2 text-white">
+                    <u>{community.title}</u>
+                  </h3>
+                  <p className="text-sm sm:text-base lg:text-lg text-gray-700 mb-4">
+                    {community.description}
+                  </p>
+                </div>
+                <Button
+                  onClick={() => {
+                    joinCommunity(community._id);
+                  }}
+                  color="green"
+                  className="text-white text-sm sm:text-base lg:text-md font-medium py-2 px-4 rounded-full bg-primary bg-opacity-80 hover:bg-primary mt-4 self-end"
+                >
+                  {joinedCommunityIds.includes(community._id)
+                    ? "Open"
+                    : community.members.includes(user.user._id)
+                    ? "Open"
+                    : "Join Now"}
+                </Button>
+              </div>
+            ))}
+          </div>
+      </div>
+        ) : (
+          <CommunityChat
+            socket={socket}
+            username={username}
+            room={room}
+            communityName={communityName}
+            communityMembers={communityMembers}
+          />
+        )}
+    </>
+  );
 }
 
 export default Community;

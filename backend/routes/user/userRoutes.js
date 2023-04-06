@@ -23,4 +23,6 @@ router.get("/userEvents/:id", userController.getUserEvents);
 
 router.get("/community",userController.getCommunity)
 
+router.post(`/joinCommunity/:id`,verify,userController.joinCommunity)
+
 module.exports = { router };
