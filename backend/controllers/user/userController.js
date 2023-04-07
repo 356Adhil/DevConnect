@@ -98,17 +98,11 @@ module.exports = {
       const id = req.id;
       const user = await User.findOne({ _id: id });
       if (user) {
-        if (user.isBlock == false) {
-          await User.updateOne(
-            { _id: id },
-            { fullName: fullName, email: email, about: about }
-          );
-          res.send({ user });
-        } else {
-          return res
-            .status(401)
-            .json({ message: "This account has been blocked by admin !!" });
-        }
+        await User.updateOne(
+          { _id: id },
+          { fullName: fullName, email: email, about: about }
+        );
+        res.send({ user });
       }
     } catch (error) {
       console.error(error);
@@ -122,19 +116,13 @@ module.exports = {
     try {
       const id = req.id;
       const user = await User.findOne({ _id: id });
-      if (user.isBlock == false) {
-        const article = await Article.create({
-          title: title,
-          content: content,
-          userName: user.fullName,
-          coverImg: image,
-        });
-        return res.status(200).json({ article, message: "Article Created" });
-      } else {
-        return res
-          .status(401)
-          .json({ message: "This account has been blocked by admin !!" });
-      }
+      const article = await Article.create({
+        title: title,
+        content: content,
+        userName: user.fullName,
+        coverImg: image,
+      });
+      return res.status(200).json({ article, message: "Article Created" });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });
@@ -160,42 +148,27 @@ module.exports = {
     const image = req.file.path;
 
     try {
-      const id = req.id;
-      const user = await User.findOne({ _id: id });
-      if (user.isBlock == false) {
-        const currentDate = new Date();
-        if (dateObj < currentDate) {
-          return res
-            .status(400)
-            .json({
-              message: "Evant cannot be added ! Event date is in the past !",
-            });
-        }
-        const events = await Events.create({
-          title: data.title,
-          description: data.description,
-          userId: user._id,
-          eventDate: dateObj,
-          eventTime: data.time,
-          location: data.location,
-          eventSeats: data.seats,
-          category: data.category,
-          coverImg: image,
-        });
-        return res.status(200).json({
-          events,
-          message: "Event Added, Awaiting Approval From Admin !",
-        });
-      } else {
-        return res
-          .status(401)
-          .json({ message: "This account has been blocked by admin !!" });
-      }
+      const events = await Events.create({
+        title: data.title,
+        description: data.description,
+        userId: req.id,
+        eventDate: dateObj,
+        eventTime: data.time,
+        location: data.location,
+        eventSeats: data.seats,
+        category: data.category,
+        coverImg: image,
+      });
+      return res.status(200).json({
+        events,
+        message: "Event Added, Awaiting Approval From Admin !",
+      });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });
     }
   },
+
   getEvent: async (req, res) => {
     try {
       const currentDate = new Date();
@@ -217,7 +190,7 @@ module.exports = {
 
       const events = await Events.find({
         userId,
-        eventDate: { $lte: new Date() },
+        eventDate: { $gte: new Date() },
       });
 
       if (!events || events.length === 0) {
@@ -245,13 +218,17 @@ module.exports = {
     try {
       const communityId = req.params.id;
       const userId = req.id;
-      
-      
+      console.log(`Joining community ${communityId} for user ${userId}`);
+
+      const userData = await User.findOne({ _id: userId }).select("fullName");
       // check if the user is already a member of the community
       const community = await Community.findById(communityId);
       if (community.members.includes(userId)) {
-        const userData = await User.findOne({ _id: userId }).select("fullName");
-        return res.json({userData,community, message: `User already in ${community.title} community` });
+        return res.json({
+          userData,
+          community,
+          message: `Welcome to ${community.title} community`,
+        });
       }
 
       // add the user to the community's members array
@@ -262,12 +239,15 @@ module.exports = {
       const user = await User.findById(userId);
       user.communities.push(communityId);
       await user.save();
-      
-      res.status(200).json({ message: `User added to ${community.title} community` });
+
+      res.status(200).json({
+        userData,
+        community,
+        message: `User added to ${community.title} community`,
+      });
     } catch (error) {
-      console.log(error);
+      console.log(`Error joining community: ${error}`);
       res.status(500).json({ message: "Internal server error" });
     }
   },
-
 };

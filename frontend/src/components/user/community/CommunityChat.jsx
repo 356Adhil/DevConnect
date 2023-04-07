@@ -8,12 +8,6 @@ const CommunityChat = ({
   communityName,
   communityMembers,
 }) => {
-  const groupMembers = [
-    { id: 1, name: "John Doe" },
-    { id: 2, name: "Jane Smith" },
-    { id: 3, name: "Bob Johnson" },
-    { id: 4, name: "Sara Lee" },
-  ];
 
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
@@ -87,9 +81,9 @@ const CommunityChat = ({
               <div
                 className={`${
                   username === message.author
-                    ? "bg-purple-600 text-white"
-                    : "bg-gray-200 text-gray-700"
-                } rounded-lg p-4 max-w-2/3 break-all`}
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-600 text-white"
+                } rounded-lg px-4 py-2 max-w-2/3 break-all`}
               >
                 {message.message}
               </div>

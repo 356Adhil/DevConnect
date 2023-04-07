@@ -33,7 +33,7 @@ function Community() {
         console.log(err);
       });
   }, []);
-
+ 
   const joinCommunity = (id) => {
     instance
       .post(
@@ -47,7 +47,7 @@ function Community() {
       )
       .then((res) => {
         setJoinedCommunityIds([...joinedCommunityIds, id]);
-        console.log(res.data.userData);
+        console.log(res.data);
         const userID = res.data.userData._id;
         const roomID = id;
         setRoom(id);
@@ -75,9 +75,10 @@ function Community() {
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Error joining community");
+      toast.error(err);
       });
   };
+   
   return (
     <>
         {!showChat ? (

@@ -77,7 +77,7 @@ function Sidebar() {
                         
             <li>
               <Link
-                to={"/admin-users"}
+                to={"/admin/users"}
                 className="flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:dark:text-primary hover:font-semibold hover:bg-secondary"
               >
                 <svg

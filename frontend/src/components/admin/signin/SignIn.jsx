@@ -36,7 +36,7 @@ export function SignIn() {
       console.log(response.data); // log the response data
       const json = response.data;
       if(json){
-        navigate('/admin-users')
+        navigate('/admin/users')
       }
       else{
         navigate('/admin')

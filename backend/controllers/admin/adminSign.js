@@ -25,8 +25,14 @@ module.exports = {
   },
 
   adminGetUsers: async (req, res) => {
-    const users = await User.find();
-    res.send(users);
+    try {
+      const users = await User.find();
+      console.log('Users:', users);
+      res.send(users);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server Error');
+    }
   },
 
   blockUser: (req, res) => {

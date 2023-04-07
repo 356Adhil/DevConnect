@@ -5,7 +5,7 @@ export default function PrivateRoute({children}) {
     const navigate = useNavigate();
 useEffect(()=>{
     if(localStorage.getItem('admin')){
-        return navigate('/admin-users')
+        return navigate('/admin/users')
     }else{
         return navigate('/admin')
     }
