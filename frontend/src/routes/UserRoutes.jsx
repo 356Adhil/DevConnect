@@ -10,6 +10,8 @@ import ProfileEditPage from '../pages/user/profile/ProfileEditPage'
 import EventPage from '../pages/user/events/EventPage'
 import EventSinglePage from '../pages/user/events/EventSinglePage'
 import UserCommunityPage from '../pages/user/community/CommunityPage';
+// import CommunityChatWrapper from '../components/user/community/CommunityChatWrapper'
+// import Community from '../components/user/community/Community';
 
 function UserRoutes() {
   return (
@@ -33,6 +35,10 @@ function UserRoutes() {
         <Route path="/single-event" exact element={<EventSinglePage />} />
 
         <Route path="/community" exact element={<UserCommunityPage />} />
+
+        {/* <Route path="/community/:id" element={<Community />} />
+
+        <Route path="/community/:id/chat" element={<CommunityChatWrapper />} /> */}
         
       </Routes>
     </>

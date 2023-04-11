@@ -1,13 +1,22 @@
 const mongoose = require("mongoose");
+const    messageSchema = new mongoose.Schema({
+  message: {
+    type: String,
+  },
+  author: {
+    type: String,
+  },
+  time: {
+    type: String,
+  },
+});
 
 const communitySchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
   },
   description: {
     type: String,
-    required: true,
   },
   isShow: {
     type: Boolean,
@@ -18,7 +27,8 @@ const communitySchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
     },
   ],
+  messages: [messageSchema],
 });
 
-const Community = mongoose.model("Community", communitySchema);
+const Community = mongoose.model('Community', communitySchema);
 module.exports = Community;

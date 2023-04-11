@@ -17,10 +17,31 @@ function Community() {
   const [room, setRoom] = useState("");
   const [communityName, setCommunityName] = useState("");
   const [communityMembers, setCommunityMembers] = useState([]);
+  const [communityId,setCommunityId] = useState('')
 
   const [showChat, setShowChat] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
+
+  const saveDataToLocalStorage = () => {
+    localStorage.setItem("showChat", JSON.stringify(showChat));
+    localStorage.setItem("communityId", JSON.stringify(communityId));
+  };
+  
+  useEffect(() => {
+    saveDataToLocalStorage();
+  }, [showChat, communityId]);
+
+  useEffect(() => {
+    const storedShowChat = JSON.parse(localStorage.getItem("showChat"));
+    const storedCommunityId = JSON.parse(localStorage.getItem("communityId"));
+  
+    if (storedShowChat !== null && storedCommunityId !== null) {
+      setShowChat(storedShowChat);
+      setCommunityId(storedCommunityId);
+    }
+  }, []);
+      
 
   useEffect(() => {
     instance
@@ -100,6 +121,7 @@ function Community() {
                 <Button
                   onClick={() => {
                     joinCommunity(community._id);
+                    setCommunityId(community._id)
                   }}
                   color="green"
                   className="text-white text-sm sm:text-base lg:text-md font-medium py-2 px-4 rounded-full bg-primary bg-opacity-80 hover:bg-primary mt-4 self-end"
@@ -121,6 +143,7 @@ function Community() {
             room={room}
             communityName={communityName}
             communityMembers={communityMembers}
+            communityId={communityId}
           />
         )}
     </>

@@ -2,7 +2,6 @@ import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import profile from "../../../assets/Profile.jpg";
-import articleCover from "../../../assets/articleCover.webp";
 
 
 function SingleArticle() {
@@ -12,7 +11,7 @@ function SingleArticle() {
   
     return (
 
-      <div className="max-w-3xl mx-auto my-8">
+      <div className="max-w-3xl md:mx-auto my-8 overflow-x-hidden overflow-y-hidden px-11">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <img
@@ -31,7 +30,7 @@ function SingleArticle() {
       </div>
       <h1 className="text-3xl font-bold my-4">{article.title}</h1>
       <img src={article.coverImg} alt={article.title} className="w-full h-64 object-cover" />
-      <div className="mt-4 prose">
+      <div className="mt-4 prose ">
           <div  dangerouslySetInnerHTML={{ __html: article.content }}></div>
         
       </div>

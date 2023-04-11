@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import ScrollToBottom from "react-scroll-to-bottom";
+import instance from "../../../axios";
+
 
 const CommunityChat = ({
   socket,
@@ -7,14 +8,27 @@ const CommunityChat = ({
   room,
   communityName,
   communityMembers,
+  communityId,
 }) => {
 
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await instance.get(`/messages/${communityId}`);
+      console.log(response.data);
+      setMessageList(response.data);
+    }
+    fetchData();
+  }, [currentMessage,communityId]);
+
   const sendMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
+        communityName: communityName,
         room: room,
         author: username,
         message: currentMessage,
@@ -23,11 +37,29 @@ const CommunityChat = ({
           ":" +
           new Date(Date.now()).getMinutes(),
       };
-      await socket.emit("send_message", messageData);
-      setMessageList((list) => [...list, messageData]);
-      setCurrentMessage("");
+  
+      try {
+        await socket.emit("send_message", messageData);
+        setCurrentMessage("");
+        const options = {
+          headers: {
+            Authorization: user.token,
+          }
+        };
+        
+        const response = await instance.patch(`/messages/${communityId}`, messageData, options);
+        
+        console.log(response.data)
+        console.log(messageData)
+        setMessageList(response.data);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
+  
+  
+
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
@@ -35,7 +67,7 @@ const CommunityChat = ({
       setMessageList((list) => [...list, data]);
     });
   }, [socket]);
-
+  
   const chatContainerRef = useRef(null); // Create a reference to the chat container
 
   useEffect(() => {
@@ -73,7 +105,7 @@ const CommunityChat = ({
         >
           {messageList.map((message) => (
             <div
-              key={message.id}
+              key={message._id}
               className={`flex flex-col mb-4 ${
                 username === message.author ? "items-end" : "items-start"
               }`}
@@ -119,13 +151,17 @@ const CommunityChat = ({
           <h2 className="text-lg font-semibold text-gray-800">
             Community Members
           </h2>
-          <ul className="mt-2">
+
+              {/* Group Members */}
+
+          {/* <ul className="mt-2">
             {communityMembers.map((member) => (
               <li key={member.id} className="text-gray-700">
                 Member
               </li>
             ))}
-          </ul>
+          </ul> */}
+          
         </div>
       </div>
     </div>

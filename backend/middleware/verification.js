@@ -1,24 +1,38 @@
 require("dotenv").config();
 const jwt = require('jsonwebtoken');
 
-function checkJwtToken(req, res, next) {
-  // Get the token from the request headers
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Missing or invalid Authorization header' });
-  }
+module.exports = {
+  verify: (req, res, next) => {
+    const token = req.headers.authorization
+    if (!token) {
+      console.log("no token");
+      return res.status(400).send({
+        token: false,
+        message: 'No taken provided',
+      });
+    }
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-  const token = authHeader.substring(7);
-
-  // Verify the token
-  try {
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    req.user = decodedToken.user; // Set the decoded user object on the request object
-    next();
-  } catch (err) {
-    return res.status(401).json({ message: 'Invalid token' });
-  }
-}
-
-module.exports = checkJwtToken;
- 
+      if (decoded){
+console.log(decoded._id);
+         
+        req.id =decoded._id
+        next();
+      }
+      else {
+      console.log("invalid token");
+        return res.status(400).send({
+          token: false,
+          message: 'invalid token',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(400).send({
+        token: false,
+        message: 'invalid token',
+      });
+    }
+  },
+};

@@ -173,7 +173,6 @@ module.exports = {
     try {
       const currentDate = new Date();
       const events = await Events.find({ eventDate: { $gte: currentDate } });
-      console.log("events:", events);
       res.json(events).status(200);
     } catch (error) {
       console.error(error);
@@ -218,7 +217,6 @@ module.exports = {
     try {
       const communityId = req.params.id;
       const userId = req.id;
-      console.log(`Joining community ${communityId} for user ${userId}`);
 
       const userData = await User.findOne({ _id: userId }).select("fullName");
       // check if the user is already a member of the community
@@ -246,8 +244,48 @@ module.exports = {
         message: `User added to ${community.title} community`,
       });
     } catch (error) {
-      console.log(`Error joining community: ${error}`);
       res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
+  storeMessages: async (req, res) => {
+    try {
+      const communityId = req.params.id;
+      const { room, author, message, time } = req.body;
+      // Create a new message object
+      const messages = {
+        message: message,
+        author: author,
+        room: room,
+        time: time,
+      };
+
+      // Find the community by ID
+      Community.findById(communityId)
+        .then((community) => {
+          // Push the new message to the messages array
+          community.messages.push(messages);
+          res.send(community.messages);
+          return community.save();
+        })
+        .then((updatedCommunity) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getMessages: async (req, res) => {
+    try {
+      const communityId = req.params.id;
+      // Find the community by ID
+      Community.findById(communityId).then((community) => {
+        res.send(community.messages);
+      });
+    } catch (error) {
+      console.log(error);
     }
   },
 };
