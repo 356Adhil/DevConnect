@@ -1,16 +1,15 @@
-
-
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
 const port = 4000;
 const http = require("http");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/user/userRoutes.js");
 const adminRoutes = require("./routes/admin/adminRoutes");
 require("dotenv").config();
 const { Server } = require("socket.io");
+const db = require('./config/db');
+// const { default: mongoose } = require("mongoose");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -43,10 +42,20 @@ io.on("connection", (socket) => {
   });
 });
 
-mongoose.connect(process.env.DB_CONNECT, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// mongoose.connect(process.env.DB_CONNECT, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+
+
+db(()=>{
+  try {
+      console.log('Database successfully connected')
+  } catch (error) {
+      console.log('Database not connected',error)
+      
+  }
+})
 
 // Modify this line to use a middleware function
 app.use("/", userRoutes.router);
