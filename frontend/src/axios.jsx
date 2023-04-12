@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://devconnect.cloud/backend",
+  baseURL: "https://api.devconnect.cloud",
 });
 
 export default instance;
