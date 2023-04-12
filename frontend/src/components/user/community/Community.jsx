@@ -6,7 +6,7 @@ import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import CommunityChat from "./CommunityChat";
 
-const socket = io.connect("http://localhost:4000");
+const socket = io.connect("https://devconnect.cloud/backend");
 
 function Community() {
   const navigate = useNavigate();
