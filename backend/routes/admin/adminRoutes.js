@@ -19,4 +19,8 @@ router.get("/admin/getCommunity", adminSign.getCommunity);
 
 router.get("/admin/showCommunity/:id", adminSign.showCommunity);
 
+router.get("/admin/getArticles",adminSign.getArticles)
+
+router.get("/admin/approveArticle/:id", adminSign.approveArticle);
+
 module.exports = router;

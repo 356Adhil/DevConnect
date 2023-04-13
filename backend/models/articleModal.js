@@ -12,9 +12,16 @@ const articleSchema = new mongoose.Schema({
     userName: {
         type:String
     },
+    userId: {
+        type: String,
+      },
     profile: {
         type: String
     },
+    isApproved: {
+        type: Boolean,
+        default: true
+      },
     coverImg: {
         type: String
     },

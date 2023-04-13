@@ -6,11 +6,11 @@ const adminPass = process.env.ADMIN_PASS;
 const User = require("../../models/userModel");
 const Event = require("../../models/eventsModel");
 const Community = require("../../models/communityModel")
+const Article = require('../../models/articleModal')
 
 module.exports = {
   adminPostSign: async (req, res) => {
     const { email, password } = req.body;
-    console.log(email, password);
     try {
       if (email === adminMail && password === adminPass) {
         const token = jwt.sign({ email }, secretKey, { expiresIn: "1d" });
@@ -27,7 +27,6 @@ module.exports = {
   adminGetUsers: async (req, res) => {
     try {
       const users = await User.find();
-      console.log('Users:', users);
       res.send(users);
     } catch (error) {
       console.error(error);
@@ -38,7 +37,6 @@ module.exports = {
   blockUser: (req, res) => {
     try {
       const id = req.params.id;
-      console.log(id);
       let value;
       User.findById(id).then((data) => {
         if (data.isBlock === true) {
@@ -124,6 +122,42 @@ module.exports = {
         }
         Community.findByIdAndUpdate(id, { isShow: value }).then((community) => {
           if (community) {
+            res.send({ succes: true });
+          }
+        });
+      });
+    } catch (error) {
+      console.error();
+    }
+  },
+
+  getArticles: async (req, res) => {
+    try {
+      const articles = await Article.find();
+      const articlesWithCreatorDetails = await Promise.all(
+        articles.map(async (article) => {
+          const creator = await User.findOne({ _id: article.userId });
+          return { ...article.toObject(), creator };
+        })
+      );
+      res.send(articlesWithCreatorDetails);
+    } catch (error) {
+      res.status(500).send({ message: "Error getting articles", error });
+    }
+  },
+
+  approveArticle: async (req, res) => {
+    try {
+      const id = req.params.id;
+      let value;
+      Article.findById(id).then((data) => {
+        if (data.isApproved === true) {
+          value = false;
+        } else {
+          value = true;
+        }
+        Article.findByIdAndUpdate(id, { isApproved: value }).then((article) => {
+          if (article) {
             res.send({ succes: true });
           }
         });

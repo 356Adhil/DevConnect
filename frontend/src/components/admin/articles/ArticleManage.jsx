@@ -30,8 +30,7 @@ function ArticleManage() {
     <h1 className="text-2xl font-bold mb-4"><u>Articles</u></h1>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
+        <thead className="text-xs text-gray-400 uppercase bg-gray-900">            <tr>
               <th scope="col" className="px-6 py-3">
                 Created User
               </th>
@@ -53,7 +52,7 @@ function ArticleManage() {
             {articles.map((article) => {
               return (
                 <tr
-                  className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
+                className="bg-gray-800 hover:bg-gray-700 text-gray-400"
                   key={article._id}
                 >
                   <th

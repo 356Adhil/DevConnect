@@ -10,27 +10,26 @@ import { setUserDetails } from "../../../Redux/features/userSlice";
 import instance from "../../../axios";
 // import { useSelector } from "react-redux";
 
-
-
 function Navbar() {
   const [scroll, setScroll] = useState(false);
   const [hamburg, setHamburg] = useState(true);
-  const [showLogin, setShowLogin] = useState(false)
-  const [showSignup, setShowSignup] = useState(false)
-  
-  const {userDetails} = useSelector((state) => state.user);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+  const [Auth, setAuth] = useState(false);
+
+  // const {userDetails} = useSelector((state) => state.user);
+
+  const userDetails = localStorage.getItem("user");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
-
-  function HandleLogout(){
+  function HandleLogout() {
     localStorage.removeItem("user");
-    dispatch(setUserDetails(null))
-    navigate('/')
-  };
-  
+    dispatch(setUserDetails(null));
+    navigate("/");
+  }
+
   function handleHamburg() {
     if (hamburg) {
       setHamburg(false);
@@ -40,7 +39,7 @@ function Navbar() {
   }
 
   function handleProfile() {
-    navigate('/profile');
+    navigate("/profile");
   }
 
   function handleSignup() {
@@ -67,8 +66,6 @@ function Navbar() {
     }
   }
 
-  
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -85,7 +82,7 @@ function Navbar() {
   }, []);
 
   return (
-    <div >
+    <div>
       <nav
         className={`bg-primary font-bold text-sm text-white ${
           scroll ? "navbar-scroll" : ""
@@ -98,16 +95,36 @@ function Navbar() {
 
           <div className={`${hamburg ? "hidden md:block" : "block"}`}>
             <ul className="md:flex gap-6 xl:gap-11 text-xs md:text-sm">
-              <li onClick={()=>{navigate('/')}} className="md:hover:text-secondary-200 py-2 cursor-pointer">
+              <li
+                onClick={() => {
+                  navigate("/");
+                }}
+                className="md:hover:text-secondary-200 py-2 cursor-pointer"
+              >
                 <span>Home</span>
               </li>
-              <li onClick={()=>{navigate('/community')}} className="hover:text-secondary-200 py-2 cursor-pointer">
+              <li
+                onClick={() => {
+                  navigate("/community");
+                }}
+                className="hover:text-secondary-200 py-2 cursor-pointer"
+              >
                 <span>Community</span>
               </li>
-              <li onClick={()=>{navigate('/events')}} className="hover:text-secondary-200 py-2 cursor-pointer">
+              <li
+                onClick={() => {
+                  navigate("/events");
+                }}
+                className="hover:text-secondary-200 py-2 cursor-pointer"
+              >
                 <span>Events</span>
               </li>
-              <li onClick={()=>{navigate('/articles')}} className="hover:text-secondary-200 py-2 cursor-pointer">
+              <li
+                onClick={() => {
+                  navigate("/articles");
+                }}
+                className="hover:text-secondary-200 py-2 cursor-pointer"
+              >
                 <span>Articles</span>
               </li>
               <li className="hover:text-secondary-200 py-2 cursor-pointer">
@@ -120,29 +137,29 @@ function Navbar() {
             className={`${hamburg ? "hidden md:block" : " flex items-center"}`}
           >
             <ul className="flex gap-3 items-center">
-              {!userDetails &&
-              <li onClick={handleLogin}>
-                <button className="border-transparent items-center border-2 bg-secondary hover:bg-primary text-primary hover:border-white hover:text-white md:py-2 md:pr-5 md:pl-5 py-1 pr-4 pl-4 rounded-full">
-                  Login
-                </button>
-              </li>
-              }
-              {!userDetails &&
-              <li onClick={handleSignup}>
-                <button>Sign Up</button>
-              </li>
-              }
+              {!userDetails && (
+                <li onClick={handleLogin}>
+                  <button className="border-transparent items-center border-2 bg-secondary hover:bg-primary text-primary hover:border-white hover:text-white md:py-2 md:pr-5 md:pl-5 py-1 pr-4 pl-4 rounded-full">
+                    Login
+                  </button>
+                </li>
+              )}
+              {!userDetails && (
+                <li onClick={handleSignup}>
+                  <button>Sign Up</button>
+                </li>
+              )}
 
-              {userDetails &&
-              <li onClick={HandleLogout}>
-                <button>Logout</button>
-              </li>
-              }
-              {userDetails &&
-              <li onClick={handleProfile}>
-                <button>Profile</button>
-              </li>
-              }
+              {userDetails && (
+                <li onClick={HandleLogout}>
+                  <button>Logout</button>
+                </li>
+              )}
+              {userDetails && (
+                <li onClick={handleProfile}>
+                  <button>Profile</button>
+                </li>
+              )}
             </ul>
           </div>
 

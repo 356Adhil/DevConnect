@@ -115,7 +115,7 @@ function Sidebar() {
                 <span className="flex-1 ml-3 whitespace-nowrap">Events</span>
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link
                 to={"/admin/articles"}
                 className="flex items-center p-2 text-base font-normal rounded-lg dark:text-white hover:dark:text-primary hover:font-semibold hover:bg-secondary"
@@ -137,7 +137,7 @@ function Sidebar() {
 
                 <span className="flex-1 ml-3 whitespace-nowrap">Articles</span>
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link
                 to={"/admin/community"}

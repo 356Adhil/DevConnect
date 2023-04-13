@@ -5,6 +5,7 @@ import SignIn from '../components/admin/signin/SignIn';
 import AdminUsers from '../pages/admin/home/AdminUsers';
 import AdminEvents from '../pages/admin/events/AdminEvents';
 import CommunityPage from '../pages/admin/community/CommunityPage';
+import ArticlesPage from '../pages/admin/articles/ArticlesPage';
 
 function AdminRoutes() {
   return (
@@ -19,6 +20,8 @@ function AdminRoutes() {
                 
         <Route path="/community" exact element={<CommunityPage />} />
         
+        <Route path="/articles" exact element={<ArticlesPage />} />
+
       </Routes>
     </>
   )

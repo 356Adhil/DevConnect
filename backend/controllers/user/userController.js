@@ -121,6 +121,7 @@ module.exports = {
         content: content,
         userName: user.fullName,
         coverImg: image,
+        userId: id,
       });
       return res.status(200).json({ article, message: "Article Created" });
     } catch (error) {

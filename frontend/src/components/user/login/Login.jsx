@@ -1,27 +1,29 @@
 import React, { useState } from "react";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 import { useFormik } from "formik";
 import { basicSchema } from "../../../schemas";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../../Redux/features/userSlice";
 import instance from "../../../axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [showModal, setShowModal] = useState(true);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
     try {
       const response = await instance.post("/login", values);
       const json = response.data;
-      console.log("response data...............:",response.data);
       // save user to local storage
       localStorage.setItem("user", JSON.stringify(json));
       console.log(localStorage.getItem("user"));
-      
+
       // update the store
       dispatch(setUserDetails(json));
-      setShowModal(false)
+      setShowModal(false);
+      navigate("/");
     } catch (error) {
       swal("Oops!", error.response.data.message, "error");
       console.log(error.response.data.message);

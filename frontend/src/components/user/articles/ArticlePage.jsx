@@ -43,7 +43,7 @@ function ArticlePage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-8">
-        {articles.map((article) => (
+        {articles?.filter((article) => article.isApproved).map((article) => (
           <div
             key={article._id}
             className="bg-white shadow-md rounded-md overflow-hidden flex flex-col cursor-pointer"
