@@ -4,20 +4,15 @@ import LogoN from "../../../assets/devconnect.svg";
 import "./Navbar.css";
 import Signup from "../signup/Signup";
 import Login from "../login/Login";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUserDetails } from "../../../Redux/features/userSlice";
-import instance from "../../../axios";
-// import { useSelector } from "react-redux";
 
 function Navbar() {
   const [scroll, setScroll] = useState(false);
   const [hamburg, setHamburg] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const [Auth, setAuth] = useState(false);
-
-  // const {userDetails} = useSelector((state) => state.user);
 
   const userDetails = localStorage.getItem("user");
 
@@ -84,8 +79,8 @@ function Navbar() {
   return (
     <div>
       <nav
-        className={`bg-primary font-bold text-sm text-white ${
-          scroll ? "navbar-scroll" : ""
+        className={`bg-primary font-bold text-sm ${
+          scroll ? "navbar-scroll text-primary" : "text-white"
         }`}
       >
         <div className="flex justify-between md:items-center p-5">
@@ -146,18 +141,18 @@ function Navbar() {
               )}
               {!userDetails && (
                 <li onClick={handleSignup}>
-                  <button>Sign Up</button>
+                  <button className="hover:text-secondary-200">Sign Up</button>
                 </li>
               )}
 
               {userDetails && (
                 <li onClick={HandleLogout}>
-                  <button>Logout</button>
+                  <button className="hover:text-secondary-200">Logout</button>
                 </li>
               )}
               {userDetails && (
                 <li onClick={handleProfile}>
-                  <button>Profile</button>
+                  <button className="hover:text-secondary-200">Profile</button>
                 </li>
               )}
             </ul>
