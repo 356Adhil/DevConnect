@@ -31,7 +31,7 @@ function UserManage() {
     <>
     <h1 className="text-2xl font-bold mb-4"><u>Users</u></h1>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <table className="w-full text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-400 uppercase bg-gray-900">
             <tr>
               <th scope="col" className="px-6 py-3">
