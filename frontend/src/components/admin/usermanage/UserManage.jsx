@@ -76,7 +76,7 @@ function UserManage() {
                       />
                     )}
                     <div className="pl-3">
-                      <div className="text-base font-semibold">
+                      <div className="text-base text-gray-300 font-semibold">
                         {user.fullName}
                       </div>
                       <div className="font-normal text-gray-500">
