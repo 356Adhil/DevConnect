@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import CommunityChat from "./CommunityChat";
+import { HashLoader } from "react-spinners";
 
 const socket = io.connect("https://api.devconnect.cloud");
 
@@ -12,6 +13,7 @@ function Community() {
   const navigate = useNavigate();
   const [community, setCommunity] = useState([]);
   const [joinedCommunityIds, setJoinedCommunityIds] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
@@ -44,6 +46,7 @@ function Community() {
       
 
   useEffect(() => {
+    setIsLoading(true); // Set isLoading to true when the request is sent
     instance
       .get("/community")
       .then((response) => {
@@ -52,10 +55,15 @@ function Community() {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false); // Set isLoading to false after the request is completed
       });
   }, []);
+  
  
   const joinCommunity = (id) => {
+    setIsLoading(true); // Set isLoading to true when the request is sent
     instance
       .post(
         `/joinCommunity/${id}`,
@@ -97,11 +105,21 @@ function Community() {
       .catch((err) => {
         console.log(err);
       toast.error(err);
+      })
+      .finally(() => {
+        setIsLoading(false); // Set isLoading to false after the request is completed
       });
   };
    
   return (
     <>
+          {isLoading && ( // Render the loader when isLoading is true
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center">
+          <div className="rounded-full p-5">
+            <HashLoader color="#36D7B7" size={100} />
+          </div>
+        </div>
+      )}
         {!showChat ? (
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">

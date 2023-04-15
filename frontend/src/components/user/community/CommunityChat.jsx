@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import instance from "../../../axios";
+import { HashLoader } from "react-spinners";
 
 
 const CommunityChat = ({
@@ -13,16 +14,24 @@ const CommunityChat = ({
 
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await instance.get(`/messages/${communityId}`);
-      console.log(response.data);
-      setMessageList(response.data);
+    setIsLoading(true); // Set isLoading to true when the request is sent
+    try {
+      async function fetchData() {
+        const response = await instance.get(`/messages/${communityId}`);
+        console.log(response.data);
+        setMessageList(response.data);
+      }
+      fetchData();
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false); // Set isLoading to false after the request is completed
     }
-    fetchData();
   }, [currentMessage,communityId]);
 
   const sendMessage = async () => {
@@ -76,6 +85,15 @@ const CommunityChat = ({
   }, [messageList]);
 
   return (
+    <>
+      {isLoading && ( // Render the loader when isLoading is true
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center">
+          <div className="rounded-full p-5">
+            <HashLoader color="#36D7B7" size={100} />
+          </div>
+        </div>
+      )}
+
     <div className="flex-1 overflow-y-auto px-6 py-4">
       <div className="bg-white shadow-md rounded-lg lg:max-w-3xl lg:mx-auto">
         <div className="flex justify-between items-center p-4 border-b border-gray-300">
@@ -165,6 +183,7 @@ const CommunityChat = ({
         </div>
       </div>
     </div>
+    </>
   );
 };
 

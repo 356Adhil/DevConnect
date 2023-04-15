@@ -4,9 +4,12 @@ import { setArticleData } from "../../../Redux/features/articleSlice";
 import profile from "../../../assets/Profile.jpg";
 import { useNavigate } from "react-router-dom";
 import instance from "../../../axios";
+import { HashLoader } from "react-spinners";
+
 
 function ArticlePage() {
   const [refresh, setRefresh] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   const { articleData } = useSelector((state) => state.article);
@@ -14,20 +17,42 @@ function ArticlePage() {
   const navigate = useNavigate();
 
   function handleClick(article) {
-    navigate("/single-article", { state: { article } });
+    setIsLoading(true); // Set isLoading to true when the request is sent
+    try {
+      navigate("/single-article", { state: { article } });
+    } catch (error) {
+      console.log(error)
+    }  finally {
+      setIsLoading(false); // Set isLoading to false after the request is completed
+    }
   }
 
   useEffect(() => {
-    instance.get("/articles").then((res) => {
-      const articles = res.data.article;
-      dispatch(setArticleData(articles));
-    });
+    setIsLoading(true); // Set isLoading to true when the request is sent
+    try {
+      instance.get("/articles").then((res) => {
+        const articles = res.data.article;
+        dispatch(setArticleData(articles));
+      });
+    } catch (error) {
+      console.log(error)
+    }  finally {
+      setIsLoading(false); // Set isLoading to false after the request is completed
+    }
   }, [refresh]);
 
   const articles = articleData;
 
   return (
     <>
+          {isLoading && ( // Render the loader when isLoading is true
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center">
+          <div className="rounded-full p-5">
+            <HashLoader color="#36D7B7" size={100} />
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-between md:p-10 p-6">
         <h1 className="flex text-3xl font-bold font-philosephor text-third">
           Articles

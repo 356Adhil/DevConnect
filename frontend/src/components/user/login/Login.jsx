@@ -6,13 +6,17 @@ import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../../Redux/features/userSlice";
 import instance from "../../../axios";
 import { useNavigate } from "react-router-dom";
+import { HashLoader } from "react-spinners";
 
 function Login() {
   const [showModal, setShowModal] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
+    setIsLoading(true); // Set isLoading to true when the request is sent
+    setShowModal(false);
     try {
       const response = await instance.post("/login", values);
       const json = response.data;
@@ -27,6 +31,8 @@ function Login() {
     } catch (error) {
       swal("Oops!", error.response.data.message, "error");
       console.log(error.response.data.message);
+    } finally {
+      setIsLoading(false); // Set isLoading to false after the request is completed
     }
   };
 
@@ -49,6 +55,15 @@ function Login() {
 
   return (
     <div className="px-8 md:flex md:justify-center lg:mx-96 md:mx-20 md:my-20 xl:my-10 xl:rounded-xl xl:py-6 text-sm">
+      
+      {isLoading && ( // Render the loader when isLoading is true
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center">
+          <div className="rounded-full p-5">
+            <HashLoader color="#36D7B7" size={100} />
+          </div>
+        </div>
+      )}
+
       {showModal ? (
         <form
           onSubmit={(event) => {
