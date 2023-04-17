@@ -18,6 +18,22 @@ const CommunityChat = ({
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  useEffect(() => {
+    setIsLoading(true); // Set isLoading to true when the request is sent
+    try {
+      async function fetchData() {
+        const response = await instance.get(`/messages/${communityId}`);
+        console.log(response.data);
+        setMessageList(response.data);
+      }
+      fetchData();
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false); // Set isLoading to false after the request is completed
+    }
+  }, [currentMessage,communityId]);
+
   const sendMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
