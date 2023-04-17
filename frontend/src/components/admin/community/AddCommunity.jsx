@@ -25,7 +25,6 @@ function AddCommunity({ onClose, onSuccess }) {
       .post("/admin/community", formData)
       .then((response) => {
         // Handle successful response
-        console.log(response);
         onSuccess(response.data);
         dispatch(setCommunityData(response.data));
         onClose()
@@ -43,7 +42,6 @@ function AddCommunity({ onClose, onSuccess }) {
       })
       .catch((error) => {
         // Handle error
-        console.log(error);
       });
   };
 
@@ -52,7 +50,7 @@ function AddCommunity({ onClose, onSuccess }) {
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
       <div className="bg-white rounded-lg overflow-hidden sm:w-1/2">
         <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">Add Event</h2>
+          <h2 className="text-2xl font-bold mb-4">Add Community</h2>
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="mb-4">
               <label

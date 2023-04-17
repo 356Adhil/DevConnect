@@ -8,10 +8,8 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import store from "../../../Redux/store";
 import { setAdminDetails } from "../../../Redux/features/adminSlice";
 import instance from "../../../axios";
 
@@ -33,7 +31,6 @@ export function SignIn() {
         "/admin",
         formData
       ); // send the form data to the backend using axios.post
-      console.log(response.data); // log the response data
       const json = response.data;
       if(json){
         navigate('/admin/users')

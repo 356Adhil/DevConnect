@@ -18,22 +18,6 @@ const CommunityChat = ({
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  useEffect(() => {
-    setIsLoading(true); // Set isLoading to true when the request is sent
-    try {
-      async function fetchData() {
-        const response = await instance.get(`/messages/${communityId}`);
-        console.log(response.data);
-        setMessageList(response.data);
-      }
-      fetchData();
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsLoading(false); // Set isLoading to false after the request is completed
-    }
-  }, [currentMessage,communityId]);
-
   const sendMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
@@ -58,21 +42,15 @@ const CommunityChat = ({
         
         const response = await instance.patch(`/messages/${communityId}`, messageData, options);
         
-        console.log(response.data)
-        console.log(messageData)
         setMessageList(response.data);
       } catch (error) {
         console.error(error);
       }
     }
   };
-  
-  
-
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      console.log(data);
       setMessageList((list) => [...list, data]);
     });
   }, [socket]);
@@ -87,7 +65,7 @@ const CommunityChat = ({
   return (
     <>
       {isLoading && ( // Render the loader when isLoading is true
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center">
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center backdrop-filter backdrop-blur-md">
           <div className="rounded-full p-5">
             <HashLoader color="#36D7B7" size={100} />
           </div>
@@ -166,19 +144,23 @@ const CommunityChat = ({
           </div>
         </div>
         <div className="p-4 bg-gray-100 border-t border-gray-300">
-          <h2 className="text-lg font-semibold text-gray-800">
-            Community Members
+          <h2 className="text-lg font-semibold text-gray-600">
+            <b>
+            <u>
+            Community Members 
+            </u>
+            </b>
           </h2>
 
               {/* Group Members */}
 
-          {/* <ul className="mt-2">
+          <ul className="mt-2">
             {communityMembers.map((member) => (
-              <li key={member.id} className="text-gray-700">
-                Member
+              <li key={member._id} className="text-gray-700 font-medium">
+                {member.fullName}
               </li>
             ))}
-          </ul> */}
+          </ul>
           
         </div>
       </div>

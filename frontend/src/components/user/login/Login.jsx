@@ -22,7 +22,6 @@ function Login() {
       const json = response.data;
       // save user to local storage
       localStorage.setItem("user", JSON.stringify(json));
-      console.log(localStorage.getItem("user"));
 
       // update the store
       dispatch(setUserDetails(json));
@@ -30,7 +29,6 @@ function Login() {
       navigate("/");
     } catch (error) {
       swal("Oops!", error.response.data.message, "error");
-      console.log(error.response.data.message);
     } finally {
       setIsLoading(false); // Set isLoading to false after the request is completed
     }
@@ -57,7 +55,7 @@ function Login() {
     <div className="px-8 md:flex md:justify-center lg:mx-96 md:mx-20 md:my-20 xl:my-10 xl:rounded-xl xl:py-6 text-sm">
       
       {isLoading && ( // Render the loader when isLoading is true
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center">
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center backdrop-filter backdrop-blur-md">
           <div className="rounded-full p-5">
             <HashLoader color="#36D7B7" size={100} />
           </div>

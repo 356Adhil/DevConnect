@@ -6,10 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setEventData } from "../../../Redux/features/eventSlice";
 import instance from "../../../axios";
 import EventView from "./EventView";
+import { HashLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
 
 const Events = () => {
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -26,10 +28,16 @@ const Events = () => {
   }
 
   const getUserEvents = (id) => {
-    instance.get(`/userEvents/${id}`).then((res) => {
-      console.log(res.data);
-      setUserEvents(res.data);
-    });
+    setIsLoading(true); // Set isLoading to true when the request is sent
+    try {
+      instance.get(`/userEvents/${id}`).then((res) => {
+        setUserEvents(res.data);
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false); // Set isLoading to false after the request is completed
+    }
   };
 
   const dispatch = useDispatch();
@@ -37,25 +45,36 @@ const Events = () => {
   const { userDetails } = useSelector((state) => state.user);
 
   useEffect(() => {
-    instance
+    setIsLoading(true); // Set isLoading to true when the request is sent
+    try {
+      instance
       .get("/events")
       .then((response) => {
-        console.log(response.data);
         setEvents(response.data);
         dispatch(setEventData(response.data));
-        console.log(eventData);
       })
       .catch((err) => {
         console.log(err);
       });
     if (userDetails) {
-      console.log(userDetails);
       getUserEvents(userDetails.user._id); // Call getUserEvents on page load
+    }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false); // Set isLoading to false after the request is completed
     }
   }, []);
 
   return (
     <>
+      {isLoading && ( // Render the loader when isLoading is true
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center backdrop-filter backdrop-blur-md">
+          <div className="rounded-full p-5">
+            <HashLoader color="#36D7B7" size={100} />
+          </div>
+        </div>
+      )}
       <div className="container mx-auto md:p-10 sm:p-5">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold mb-4">Upcoming Events</h1>
@@ -91,9 +110,16 @@ const Events = () => {
                       {event.category}
                     </span>
                   </div>
-                  <p className="text-gray-600 text-sm mb-2">
-                  {new Date(event.eventDate).toLocaleDateString()}
-                  </p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-gray-600 text-sm">
+                      {new Date(event.eventDate).toLocaleDateString()}
+                    </p>
+                    {event.eventSeats <= 0 && (
+                      <span className="text-gray-800 text-sm font-medium bg-yellow-400 rounded-md py-1 px-2 mt-5">
+                        Event is already fully booked
+                      </span>
+                    )}
+                  </div>
                   <p className="text-gray-800">{event.description}</p>
                 </div>
               </div>
@@ -103,6 +129,8 @@ const Events = () => {
           <EventAddModal
             onClose={() => setShowModal(false)}
             handleAddEvent={handleAddEvent}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
           />
         )}
 

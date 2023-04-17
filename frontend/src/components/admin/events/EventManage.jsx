@@ -12,13 +12,11 @@ function EventManage() {
           event._id === id ? { ...event, isApproved: !event.isApproved } : event
         )
       );
-      // console.log(`Block User ID: ${id}`);
     });
   };
 
   useEffect(() => {
     instance.get("/admin/getEvents").then((res) => {
-      console.log(res.data);
       if (res.data) {
         setEvents(res.data);
       }

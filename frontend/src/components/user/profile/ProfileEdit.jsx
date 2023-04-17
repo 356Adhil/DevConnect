@@ -4,13 +4,16 @@ import { Formik, useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import instance from "../../../axios";
+import { HashLoader } from "react-spinners";
 
 function ProfileEdit() {
   const user = JSON.parse(localStorage.getItem("user"));
   const {userDetails} = useSelector((state)=> state.user)
   const [data,setData] = useState({})
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
+    setIsLoading(true); // Set isLoading to true when the request is sent
     instance
       .get("/getProfile", {
         headers: {
@@ -19,11 +22,17 @@ function ProfileEdit() {
       })
       .then((res) => {
         setData(res.data.user);
-      });
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+      .finally(()=>{
+        setIsLoading(false); // Set isLoading to false after the request is completed
+      })
   },[]);
 
   const onSubmit = async (values, actions) => {
-    console.log(values);
+    setIsLoading(true); // Set isLoading to true when the request is sent
     try {
       const response = await instance.post(
         "/editprofile",
@@ -39,11 +48,11 @@ function ProfileEdit() {
         }
       );
       navigate('/profile')
-      console.log(response.data);
       // Do something with the response data
     } catch (error) {
-      console.log(error.response.data);
       // Do something with the error response data
+    } finally {
+      setIsLoading(false); // Set isLoading to false after the request is completed
     }
   };
 
@@ -59,6 +68,15 @@ function ProfileEdit() {
     });
 
   return (
+    <>
+          {isLoading && ( // Render the loader when isLoading is true
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center backdrop-filter backdrop-blur-md">
+          <div className="rounded-full p-5">
+            <HashLoader color="#36D7B7" size={100} />
+          </div>
+        </div>
+      )}
+
     <div className="flex justify-center items-center h-screen">
   <div className="bg-gray-200 px-10 py-5 rounded-xl">
       <Formik>
@@ -122,6 +140,7 @@ function ProfileEdit() {
       </Formik>
       </div>
 </div>
+</>
   );
 }
 

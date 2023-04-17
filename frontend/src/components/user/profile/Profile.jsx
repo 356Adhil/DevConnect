@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
-import profile from "../../../assets/Profile.jpg";
+import profile from "../../../assets/empty-profile.webp";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "../../../Redux/features/userSlice";
 import instance from "../../../axios";
+import { HashLoader } from "react-spinners";
 
 export default function Profile() {
 
     const user = JSON.parse(localStorage.getItem("user"))
       const navigate = useNavigate();
       const dispatch = useDispatch()
+      const [isLoading, setIsLoading] = useState(false);
 
     const {userDetails} = useSelector((state)=> state.user)
-  console.log(userDetails)
 
     useEffect(() => {
+      setIsLoading(true); // Set isLoading to true when the request is sent
       instance
         .get("/getProfile", {
           headers: {
@@ -22,9 +24,14 @@ export default function Profile() {
           },
         })
         .then((res) => {
-          console.log(res.data)
           dispatch(setUserDetails(res.data))
-        });
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+        .finally(()=>{
+          setIsLoading(false); // Set isLoading to false after the request is completed
+        })
     },[]);
     
     const [showEditProfile,setShowEditProfile] = useState(false)
@@ -35,6 +42,14 @@ export default function Profile() {
     
   return (
     <>
+          {isLoading && ( // Render the loader when isLoading is true
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center backdrop-filter backdrop-blur-md">
+          <div className="rounded-full p-5">
+            <HashLoader color="#36D7B7" size={100} />
+          </div>
+        </div>
+      )}
+      
       <main className="profile-page">
         <section className="relative block" style={{ height: "500px" }}>
           <div
@@ -100,7 +115,7 @@ export default function Profile() {
                     navigate('/editprofile')
                   }
                   <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                    <div className="flex justify-center py-4 lg:pt-4 pt-8">
+                    {/* <div className="flex justify-center py-4 lg:pt-4 pt-8">
                       <div className="mr-4 p-3 text-center">
                         <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
                           22
@@ -113,7 +128,7 @@ export default function Profile() {
                         </span>
                         <span className="text-sm text-gray-500">Savrd Articles</span>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="text-center mt-12">

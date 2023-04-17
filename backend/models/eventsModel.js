@@ -25,7 +25,7 @@ const eventSchema = new mongoose.Schema({
     default: () => new Date().toISOString().substr(0, 10)
   },
   eventDate: {
-    type: String,
+    type: Date,
     required: true
   },
   eventSeats: {

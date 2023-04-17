@@ -122,7 +122,12 @@ function Navbar() {
               >
                 <span>Articles</span>
               </li>
-              <li className="hover:text-secondary-200 py-2 cursor-pointer">
+              <li 
+              className="hover:text-secondary-200 py-2 cursor-pointer"
+              onClick={() => {
+                navigate("/about");
+              }}
+              >
                 <span>About Us</span>
               </li>
             </ul>

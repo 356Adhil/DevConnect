@@ -12,13 +12,11 @@ function ArticleManage() {
           article._id === id ? { ...article, isApproved: !article.isApproved } : article
         )
       );
-      // console.log(`Block User ID: ${id}`);
     });
   };
 
   useEffect(() => {
     instance.get("/admin/getArticles").then((res) => {
-      console.log(res.data);
       if (res.data) {
         setArticles(res.data);
       }

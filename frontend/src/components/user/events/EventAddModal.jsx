@@ -3,8 +3,9 @@ import { useDispatch } from "react-redux";
 import { setEventData } from "../../../Redux/features/eventSlice";
 import instance from "../../../axios";
 import { toast } from "react-toastify";
+import { HashLoader } from "react-spinners";
 
-function EventAddModal({ onClose, handleAddEvent }) {
+function EventAddModal({ onClose, handleAddEvent, isLoading, setIsLoading }) {
   const dispatch = useDispatch();
   const [eventData, setEventDatas] = useState({
     title: "",
@@ -23,9 +24,10 @@ function EventAddModal({ onClose, handleAddEvent }) {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const handleSubmit = async (event) => {
+    setIsLoading(true); // Set isLoading to true when the request is sent
     try {
       event.preventDefault();
-
+      
       const formData = new FormData();
       formData.append("title", eventData.title);
       formData.append("category", eventData.category);
@@ -35,16 +37,15 @@ function EventAddModal({ onClose, handleAddEvent }) {
       formData.append("seats", eventData.seats);
       formData.append("description", eventData.description);
       formData.append("image", eventData.image);
-
+      
+      onClose();
       const res = await instance.post("/events", formData, {
         headers: {
           Authorization: user.token,
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(res)
       handleAddEvent(res.data.events)
-      onClose();
       toast.warning(res.data.message, {
         position: "top-center",
         autoClose: 5000,
@@ -67,11 +68,21 @@ function EventAddModal({ onClose, handleAddEvent }) {
         progress: undefined,
         theme: "colored",
       });
-      console.log(error.response.data.message);
+    }
+    finally {
+      setIsLoading(false); // Set isLoading to false after the request is completed
     }
   };
 
   return (
+    <>
+          {isLoading && ( // Render the loader when isLoading is true
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center">
+          <div className="rounded-full p-5">
+            <HashLoader color="#36D7B7" size={100} />
+          </div>
+        </div>
+      )}
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
       <div className="bg-white rounded-lg overflow-hidden sm:w-1/2">
         <div className="p-4">
@@ -229,6 +240,7 @@ function EventAddModal({ onClose, handleAddEvent }) {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

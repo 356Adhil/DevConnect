@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import profile from "../../../assets/Profile.jpg";
 import instance from "../../../axios";
@@ -14,13 +12,11 @@ function UserManage() {
           user._id === id ? { ...user, isBlock: !user.isBlock } : user
         )
       );
-      // console.log(`Block User ID: ${id}`);
     });
   };
 
   useEffect(() => {
     instance.get("/admin/getusers").then((res) => {
-      console.log(res.data);
       if (res.data) {
         setUsers(res.data);
       }

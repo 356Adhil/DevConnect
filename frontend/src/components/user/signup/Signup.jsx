@@ -5,18 +5,20 @@ import { basicSchema } from "../../../schemas";
 import axios from "axios";
 import Login from "../login/Login";
 import instance from "../../../axios";
+import { HashLoader } from "react-spinners";
 
 
 function Signup() {
   const [showModal, setShowModal] = useState(true);
   const [showLogin, setShowLogin] = useState(false)
   const [showSignup, setShowSignup] = useState(true)
+  const [isLoading, setIsLoading] = useState(false);
   
 
   const onSubmit = async (values, actions) => {
+    setIsLoading(true); // Set isLoading to true when the request is sent
     try {
       const response = await instance.post('/signup', values);
-      console.log(response);
       const success = response.data.message;
       swal("Yaay!", success, "success");
       actions.resetForm();
@@ -26,6 +28,8 @@ function Signup() {
       const already = error.response.data.message;
       swal("Oops!", already, "error");
       actions.resetForm();
+    } finally {
+      setIsLoading(false); // Set isLoading to false after the request is completed
     }
   };
   
@@ -50,6 +54,14 @@ function Signup() {
   });
 
   return (
+    <>
+          {isLoading && ( // Render the loader when isLoading is true
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center backdrop-filter backdrop-blur-md">
+          <div className="rounded-full p-5">
+            <HashLoader color="#36D7B7" size={100} />
+          </div>
+        </div>
+      )}
     <div className="">
       { showLogin ? (
       <div>
@@ -221,6 +233,7 @@ function Signup() {
       ) : null}
     </div>
     </div>
+    </>
   );
 }
 

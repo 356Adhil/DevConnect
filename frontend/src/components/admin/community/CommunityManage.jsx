@@ -19,13 +19,11 @@ function CommunityManage() {
             : community
         )
       );
-      // console.log(`Block User ID: ${id}`);
     });
   };
 
   useEffect(() => {
     instance.get("/admin/getCommunity").then((res) => {
-      console.log(res.data);
       if (res.data) {
         setCommunity(res.data);
       }

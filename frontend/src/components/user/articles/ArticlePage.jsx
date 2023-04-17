@@ -45,8 +45,8 @@ function ArticlePage() {
 
   return (
     <>
-          {isLoading && ( // Render the loader when isLoading is true
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center">
+      {isLoading && ( // Render the loader when isLoading is true
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 flex justify-center items-center backdrop-filter backdrop-blur-md">
           <div className="rounded-full p-5">
             <HashLoader color="#36D7B7" size={100} />
           </div>

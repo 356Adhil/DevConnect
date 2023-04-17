@@ -22,6 +22,8 @@ router.get("/events", userController.getEvent);
 
 router.get("/userEvents/:id", userController.getUserEvents);
 
+router.post("/book-event", userController.postBookEvent);
+
 router.get("/community",userController.getCommunity)
 
 router.post(`/joinCommunity/:id`,verify, userController.joinCommunity)

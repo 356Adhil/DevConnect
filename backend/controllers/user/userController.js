@@ -7,6 +7,7 @@ const Events = require("../../models/eventsModel");
 const Community = require("../../models/communityModel");
 const bcrypt = require("bcrypt");
 const { default: mongoose } = require("mongoose");
+const Booking = require("../../models/eventBooking");
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, secretKey, { expiresIn: "1d" });
@@ -148,6 +149,11 @@ module.exports = {
     const dateObj = new Date(inputDate);
     const image = req.file.path;
 
+    // Check if the event date is in the past
+    if (dateObj < new Date()) {
+      return res.status(400).json({ message: "Cannot add events with past dates" });
+    }
+
     try {
       const events = await Events.create({
         title: data.title,
@@ -170,6 +176,7 @@ module.exports = {
     }
   },
 
+
   getEvent: async (req, res) => {
     try {
       const currentDate = new Date();
@@ -177,8 +184,10 @@ module.exports = {
       res.json(events).status(200);
     } catch (error) {
       console.error(error);
+      res.status(500).send("Internal server error");
     }
   },
+
 
   getUserEvents: async (req, res) => {
     try {
@@ -218,35 +227,44 @@ module.exports = {
     try {
       const communityId = req.params.id;
       const userId = req.id;
-
+    
       const userData = await User.findOne({ _id: userId }).select("fullName");
       // check if the user is already a member of the community
       const community = await Community.findById(communityId);
+    
+      const members = [];
+      for (const memberId of community.members) {
+        const communityMember = await User.findById(memberId);
+        members.push(communityMember);
+      }
       if (community.members.includes(userId)) {
         return res.json({
           userData,
           community,
+          members,
           message: `Welcome to ${community.title} community`,
         });
       }
-
+    
       // add the user to the community's members array
       community.members.push(userId);
       await community.save();
-
+    
       // add the community to the user's communities array
       const user = await User.findById(userId);
       user.communities.push(communityId);
       await user.save();
-
+    
       res.status(200).json({
         userData,
         community,
+        members,
         message: `User added to ${community.title} community`,
       });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }
+    
   },
 
   storeMessages: async (req, res) => {
@@ -289,4 +307,41 @@ module.exports = {
       console.log(error);
     }
   },
+
+  postBookEvent: async (req, res) => {
+    try {
+      const { eventId, userId, username, email } = req.body;
+      const event = await Events.findById(eventId);
+        
+      if (!event) {
+        return res.status(404).json({ error: "Event not found" });
+      }
+  
+      const booking = await Booking.findOne({ eventId, userId });
+  
+      if (booking) {
+        return res.json({ error: "You have already booked this event" });
+      }
+  
+      if (event.eventSeats <= 0) {
+        return res.json({ error: "Event is already fully booked" });
+      }
+  
+      const newBooking = new Booking({ eventId, userId, username, email });
+      await newBooking.save();
+  
+      await Events.findByIdAndUpdate(
+        eventId,
+        {
+          $inc: { eventSeats: -1 },
+        },
+        { new: true }
+      );
+  
+      res.json({ message: "Event booked successfully" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+  
 };
